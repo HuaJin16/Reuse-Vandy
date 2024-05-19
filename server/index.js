@@ -2,11 +2,18 @@ const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/auth.route");
+const cors = require("cors");
 
 /* CONFIGURATIONS */
 const app = express();
 dotenv.config();
 app.use(express.json());
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:5173",
+  })
+);
 
 /* DATABASE CONNECTION */
 mongoose

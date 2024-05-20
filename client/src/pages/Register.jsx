@@ -8,10 +8,15 @@ export default function Register() {
     email: "",
     password: "",
   });
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [e.target.name]: "",
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -25,12 +30,15 @@ export default function Register() {
         body: JSON.stringify(data),
       });
       const userData = await res.json();
-      if (!userData.error) {
+      if (userData.inputErrors) {
+        setErrors(userData.inputErrors);
+      } else {
         navigate("/login");
         setData({});
+        setErrors({});
       }
     } catch (err) {
-      console.log(err);
+      setErrors({ general: err.message });
     }
   };
 
@@ -49,6 +57,7 @@ export default function Register() {
           value={data.firstName}
           onChange={handleChange}
         />
+        {errors.firstName && <span>{errors.firstName}</span>}
         <input
           type="text"
           name="lastName"
@@ -56,6 +65,7 @@ export default function Register() {
           value={data.lastName}
           onChange={handleChange}
         />
+        {errors.lastName && <span>{errors.lastName}</span>}
         <input
           type="text"
           name="email"
@@ -63,6 +73,7 @@ export default function Register() {
           value={data.email}
           onChange={handleChange}
         />
+        {errors.email && <span>{errors.email}</span>}
         <input
           type="text"
           name="password"
@@ -70,6 +81,7 @@ export default function Register() {
           value={data.password}
           onChange={handleChange}
         />
+        {errors.password && <span>{errors.password}</span>}
         <button type="submit">Register</button>
       </form>
       <div>
@@ -78,6 +90,7 @@ export default function Register() {
           <span>Sign in</span>
         </Link>
       </div>
+      {errors.general && <span>{errors.general}</span>}
     </div>
   );
 }

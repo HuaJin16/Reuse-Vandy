@@ -3,10 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [data, setData] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [e.target.name]: "",
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -20,12 +25,15 @@ export default function Login() {
         body: JSON.stringify(data),
       });
       const userData = await res.json();
-      if (!userData.error) {
+      if (userData.inputErrors) {
+        setErrors(userData.inputErrors);
+      } else {
         navigate("/");
         setData({});
+        setErrors({});
       }
     } catch (err) {
-      console.log(err);
+      setErrors({ general: err.message });
     }
   };
 
@@ -44,6 +52,7 @@ export default function Login() {
           value={data.email}
           onChange={handleChange}
         />
+        {errors.email && <span>{errors.email}</span>}
         <input
           type="text"
           name="password"
@@ -51,6 +60,7 @@ export default function Login() {
           value={data.password}
           onChange={handleChange}
         />
+        {errors.password && <span>{errors.password}</span>}
         <button type="submit">Login</button>
       </form>
       <div>
@@ -62,6 +72,7 @@ export default function Login() {
           <span>Sign up</span>
         </Link>
       </div>
+      {errors.general && <span>{errors.general}</span>}
     </div>
   );
 }

@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setLogin } from "../redux/user/userSlice.js";
 
 export default function Login() {
   const [data, setData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -31,6 +34,7 @@ export default function Login() {
         navigate("/");
         setData({});
         setErrors({});
+        dispatch(setLogin(userData));
       }
     } catch (err) {
       setErrors({ general: err.message });

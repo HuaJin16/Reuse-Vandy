@@ -23,6 +23,11 @@ const userSchema = new mongoose.Schema(
       required: [true, "Password is required"],
       minLength: [6, "Minimum of 6 characters required"],
     },
+    avatar: {
+      type: String,
+      default:
+        "https://www.freeiconspng.com/thumbs/profile-icon-png/profile-icon-9.png",
+    },
   },
   { timestamps: true }
 );

@@ -6,13 +6,14 @@ const handleErrors = require("../utils/errors");
 /* USER REGISTER */
 const register = async (req, res) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, avatar } = req.body;
 
     const newUser = new User({
       firstName,
       lastName,
       email,
       password,
+      avatar,
     });
     const savedUser = await newUser.save();
     res.status(201).json(savedUser);

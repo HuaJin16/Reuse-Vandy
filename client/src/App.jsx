@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import PrivateRoute from "./components/PrivateRoute";
 import Header from "./components/Header";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -17,6 +18,14 @@ function App() {
             element={
               <>
                 <Header /> <Home />
+              </>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <>
+                <Header /> <Profile />
               </>
             }
           />

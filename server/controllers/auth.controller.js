@@ -35,11 +35,25 @@ const login = async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     const { password: userPass, ...userInfo } = user._doc;
-    res.cookie("token", token, { httpsOnly: true }).status(200).json(userInfo);
+    res
+      .cookie("access_token", token, { httpOnly: true })
+      .status(200)
+      .json(userInfo);
   } catch (err) {
     const inputErrors = handleErrors(err);
     return res.status(400).json({ inputErrors });
   }
 };
 
-module.exports = { register, login };
+/* USER LOGOUT */
+const logout = (req, res) => {
+  try {
+    res.clearCookie("access_token");
+    res.status(200).json("User logged out");
+  } catch (err) {
+    const logoutErrors = handleErrors(err);
+    return res.status(400).json({ logoutErrors });
+  }
+};
+
+module.exports = { register, login, logout };

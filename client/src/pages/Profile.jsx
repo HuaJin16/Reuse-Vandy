@@ -9,6 +9,8 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
+import { deleteUser, updateUser, logoutUser } from "../redux/user/userSlice";
+import { useDispatch } from "react-redux";
 
 export default function Profile() {
   const { currentUser } = useSelector((state) => state.user);
@@ -18,6 +20,10 @@ export default function Profile() {
   const [uploadPercentage, setUploadPercentage] = useState(0);
   const [uploadError, setUploadError] = useState(false);
   const [formData, setFormData] = useState({});
+  const dispatch = useDispatch();
+  const [errors, setErrors] = useState({});
+  const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSectionChange = (section) => {
     setShowSection(section);
@@ -58,6 +64,76 @@ export default function Profile() {
     );
   };
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(
+        `http://localhost:8000/user/update/${currentUser._id}`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+      const userData = await res.json();
+      if (userData.authErrors) {
+        setErrors(userData.authErrors);
+      } else {
+        setFormData({});
+        setErrors({});
+        dispatch(updateUser(userData));
+        setUpdateSuccess(true);
+        setIsSubmitted(true);
+      }
+    } catch (err) {
+      setErrors({ auth: err.message });
+      setUpdateSuccess(false);
+    }
+  };
+
+  const handleDeleteUser = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8000/user/delete/${currentUser._id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+      const userData = await res.json();
+      if (userData.authErrors) {
+        setErrors(UserData.authErrors);
+      } else {
+        setErrors({});
+        dispatch(deleteUser(userData));
+      }
+    } catch (err) {
+      setErrors({ auth: err.message });
+    }
+  };
+
+  const handleUserLogout = async () => {
+    try {
+      const res = await fetch(`http://localhost:8000/auth/logout`);
+      const userData = await res.json();
+      if (userData.logoutErrors) {
+        setErrors(userData.logoutErrors);
+      } else {
+        setErrors({});
+        dispatch(logoutUser(userData));
+      }
+    } catch (err) {
+      setErrors({ logout: err.message });
+    }
+  };
+
   return (
     <div>
       <h1>Your Profile</h1>
@@ -73,21 +149,24 @@ export default function Profile() {
           onClick={() => fileRef.current.click()}
           src={formData.avatar || currentUser.avatar}
         />
-        <p>
-          {uploadError ? (
-            <span>
-              Image upload error (file size or format may not be supported)
-            </span>
-          ) : uploadPercentage > 0 && uploadPercentage < 100 ? (
-            <span>{`Uploading... ${uploadPercentage}%`}</span>
-          ) : uploadPercentage === 100 ? (
-            <span>
-              Image uploaded successfully (update in account tab to save avatar)
-            </span>
-          ) : (
-            " "
-          )}
-        </p>
+        {!isSubmitted && (
+          <p>
+            {uploadError ? (
+              <span>
+                Image upload error (file size or format may not be supported)
+              </span>
+            ) : uploadPercentage > 0 && uploadPercentage < 100 ? (
+              <span>{`Uploading... ${uploadPercentage}%`}</span>
+            ) : uploadPercentage === 100 ? (
+              <span>
+                Image uploaded successfully (update in account tab to save
+                avatar)
+              </span>
+            ) : (
+              " "
+            )}
+          </p>
+        )}
         <span>
           {currentUser.firstName} {currentUser.lastName}
         </span>
@@ -106,12 +185,52 @@ export default function Profile() {
       <div>
         {showSection === "posts" && <h2>Your Posts</h2>}
         {showSection === "account" && (
-          <form>
-            <input type="text" name="firstName" placeholder="First name" />
-            <input type="text" name="lastName" placeholder="Last name" />
-            <input type="text" name="password" placeholder="Password" />
-            <button>Update</button>
-          </form>
+          <div>
+            <form onSubmit={handleSubmit}>
+              <h2>Update one or all fields:</h2>
+              <input
+                type="text"
+                name="firstName"
+                placeholder="First name"
+                onChange={handleChange}
+              />
+              <input
+                type="text"
+                name="lastName"
+                placeholder="Last name"
+                onChange={handleChange}
+              />
+              <input
+                type="text"
+                name="password"
+                placeholder="Password"
+                onChange={handleChange}
+              />
+              <button type="submit">Update</button>
+            </form>
+            <div>
+              <button onClick={handleDeleteUser}>Delete account</button>
+              <button onClick={handleUserLogout}>Logout</button>
+            </div>
+            <div>
+              {(errors.password ||
+                errors.auth ||
+                errors.logout ||
+                updateSuccess) && (
+                <span>
+                  {errors.password
+                    ? errors.password
+                    : errors.auth
+                    ? errors.auth
+                    : errors.logout
+                    ? errors.logout
+                    : updateSuccess
+                    ? "User updated successfully"
+                    : null}
+                </span>
+              )}
+            </div>
+          </div>
         )}
       </div>
     </div>

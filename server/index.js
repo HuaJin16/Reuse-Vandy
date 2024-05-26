@@ -3,6 +3,8 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/auth.route");
 const cors = require("cors");
+const userRoutes = require("./routes/user.route");
+const cookieParser = require("cookie-parser");
 
 /* CONFIGURATIONS */
 const app = express();
@@ -14,6 +16,7 @@ app.use(
     origin: "http://localhost:5173",
   })
 );
+app.use(cookieParser());
 
 /* DATABASE CONNECTION */
 mongoose
@@ -27,6 +30,7 @@ mongoose
 
 /* ROUTES */
 app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
 
 /* SERVER CONNECTION */
 const PORT = process.env.PORT || 8000;

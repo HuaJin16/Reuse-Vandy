@@ -1,5 +1,11 @@
 const handleErrors = (err) => {
-  inputErrors = { firstName: "", lastName: "", email: "", password: "" };
+  inputErrors = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    auth: "",
+  };
 
   /* HANDLE DUPLICATE EMAIL ERROR*/
   if (err.code === 11000) {
@@ -20,6 +26,17 @@ const handleErrors = (err) => {
   }
   if (err.message === "invalid password") {
     inputErrors.password = "Invalid password for the provided email";
+  }
+
+  /* HANDLE AUTHENTICATION ERRORS */
+  if (err.message === "unauthorized") {
+    inputErrors.auth = "You are not authenticated";
+  }
+  if (err.message === "invalid token") {
+    inputErrors.auth = "Invalid token";
+  }
+  if (err.message === "longer password required") {
+    inputErrors.password = "Minimum of 6 characters required";
   }
 
   return inputErrors;

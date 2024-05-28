@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import PrivateRoute from "./components/PrivateRoute";
 import Header from "./components/Header";
 import Profile from "./pages/Profile";
+import New from "./pages/New";
 
 function App() {
   return (
@@ -26,6 +27,14 @@ function App() {
             element={
               <>
                 <Header /> <Profile />
+              </>
+            }
+          />
+          <Route
+            path="/new"
+            element={
+              <>
+                <Header /> <New />
               </>
             }
           />

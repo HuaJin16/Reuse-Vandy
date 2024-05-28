@@ -5,6 +5,11 @@ const handleErrors = (err) => {
     email: "",
     password: "",
     auth: "",
+    title: "",
+    price: "",
+    description: "",
+    imageURLs: "",
+    userRef: "",
   };
 
   /* HANDLE DUPLICATE EMAIL ERROR*/
@@ -14,7 +19,12 @@ const handleErrors = (err) => {
   }
 
   /* HANDLE VALIDATION ERRORS */
-  if (err && err.message && err.message.includes("User validation failed")) {
+  if (
+    err &&
+    err.message &&
+    (err.message.includes("User validation failed") ||
+      err.message.includes("Post validation failed"))
+  ) {
     Object.values(err.errors).forEach(({ properties }) => {
       inputErrors[properties.path] = properties.message;
     });

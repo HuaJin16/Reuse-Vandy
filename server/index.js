@@ -5,6 +5,7 @@ const authRoutes = require("./routes/auth.route");
 const cors = require("cors");
 const userRoutes = require("./routes/user.route");
 const cookieParser = require("cookie-parser");
+const postRoutes = require("./routes/post.route");
 
 /* CONFIGURATIONS */
 const app = express();
@@ -31,6 +32,7 @@ mongoose
 /* ROUTES */
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
+app.use("/post", postRoutes);
 
 /* SERVER CONNECTION */
 const PORT = process.env.PORT || 8000;

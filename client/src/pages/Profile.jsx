@@ -11,6 +11,7 @@ import {
 import { app } from "../firebase";
 import { deleteUser, updateUser, logoutUser } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 
 export default function Profile() {
   const { currentUser } = useSelector((state) => state.user);
@@ -183,7 +184,11 @@ export default function Profile() {
         </button>
       </div>
       <div>
-        {showSection === "posts" && <h2>Your Posts</h2>}
+        {showSection === "posts" && (
+          <button>
+            <Link to="/new">New Post</Link>
+          </button>
+        )}
         {showSection === "account" && (
           <div>
             <form onSubmit={handleSubmit}>

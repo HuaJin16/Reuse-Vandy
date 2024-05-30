@@ -25,6 +25,7 @@ export default function Profile() {
   const [errors, setErrors] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [userPosts, setUserPosts] = useState([]);
 
   const handleSectionChange = (section) => {
     setShowSection(section);
@@ -135,6 +136,38 @@ export default function Profile() {
     }
   };
 
+  const showPosts = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8000/user/posts/${currentUser._id}`,
+        { credentials: "include" }
+      );
+      const data = await res.json();
+      if (data.postErrors) {
+        setErrors(data.postErrors);
+      } else {
+        setUserPosts(data);
+        setErrors({ posts: "", auth: "" });
+      }
+    } catch (err) {
+      setErrors({ posts: err.message });
+    }
+  };
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        await showPosts();
+      } catch (err) {
+        setErrors({ posts: err.message });
+      }
+    };
+
+    if (showSection === "posts") {
+      fetchPosts();
+    }
+  }, [showSection]);
+
   return (
     <div>
       <h1>Your Profile</h1>
@@ -185,9 +218,28 @@ export default function Profile() {
       </div>
       <div>
         {showSection === "posts" && (
-          <button>
-            <Link to="/new">New Post</Link>
-          </button>
+          <div>
+            <div>
+              {userPosts &&
+                userPosts.length > 0 &&
+                userPosts.map((post) => (
+                  <div key={post._id}>
+                    <Link to={`/post/${post._id}`}>
+                      <img src={post.imageUrls[0]} alt="post image" />
+                    </Link>
+                    <Link to={`/post/${post._id}`}>{post.title}</Link>
+                    <div>
+                      <button>Delete</button>
+                      <button>Edit</button>
+                    </div>
+                  </div>
+                ))}
+            </div>
+            {errors.posts && <span>{errors.posts}</span>}
+            <button>
+              <Link to="/new">New Post</Link>
+            </button>
+          </div>
         )}
         {showSection === "account" && (
           <div>
@@ -221,6 +273,7 @@ export default function Profile() {
               {(errors.password ||
                 errors.auth ||
                 errors.logout ||
+                errors.posts ||
                 updateSuccess) && (
                 <span>
                   {errors.password
@@ -229,6 +282,8 @@ export default function Profile() {
                     ? errors.auth
                     : errors.logout
                     ? errors.logout
+                    : errors.posts
+                    ? errors.posts
                     : updateSuccess
                     ? "User updated successfully"
                     : null}

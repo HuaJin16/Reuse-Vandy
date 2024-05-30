@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
 const handleErrors = require("../utils/errors");
 const bcrypt = require("bcrypt");
+const Post = require("../models/post.model");
 
 const updateUser = async (req, res) => {
   try {
@@ -48,4 +49,16 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { updateUser, deleteUser };
+const getPosts = async (req, res) => {
+  try {
+    if (req.user.id !== req.params.id) throw Error("unauthorized");
+
+    const posts = await Post.find({ userRef: req.params.id });
+    res.status(200).json(posts);
+  } catch (err) {
+    const postErrors = handleErrors(err);
+    return res.status(400).json({ postErrors });
+  }
+};
+
+module.exports = { updateUser, deleteUser, getPosts };

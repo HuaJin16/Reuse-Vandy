@@ -18,7 +18,12 @@ const postSchema = new mongoose.Schema(
     },
     imageUrls: {
       type: Array,
-      required: [true, "At least one image URL is required"],
+      validate: {
+        validator: function (urls) {
+          return urls.length > 0;
+        },
+        message: "At least one image URL is required when creating post",
+      },
     },
     userRef: {
       type: String,

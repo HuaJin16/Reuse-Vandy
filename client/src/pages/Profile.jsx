@@ -168,6 +168,24 @@ export default function Profile() {
     }
   }, [showSection]);
 
+  const handleDeletePost = async (postId) => {
+    try {
+      const res = await fetch(`http://localhost:8000/post/delete/${postId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (data.postErrors) {
+        setErrors(data.postErrors);
+      } else {
+        setErrors({ posts: "" });
+        setUserPosts((prev) => prev.filter((post) => post._id !== postId));
+      }
+    } catch (err) {
+      setErrors({ posts: err.message });
+    }
+  };
+
   return (
     <div>
       <h1>Your Profile</h1>
@@ -229,7 +247,9 @@ export default function Profile() {
                     </Link>
                     <Link to={`/post/${post._id}`}>{post.title}</Link>
                     <div>
-                      <button>Delete</button>
+                      <button onClick={() => handleDeletePost(post._id)}>
+                        Delete
+                      </button>
                       <button>Edit</button>
                     </div>
                   </div>

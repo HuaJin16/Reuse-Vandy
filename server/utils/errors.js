@@ -10,6 +10,7 @@ const handleErrors = (err) => {
     description: "",
     imageURLs: "",
     userRef: "",
+    posts: "",
   };
 
   /* HANDLE DUPLICATE EMAIL ERROR*/
@@ -47,6 +48,11 @@ const handleErrors = (err) => {
   }
   if (err.message === "longer password required") {
     inputErrors.password = "Minimum of 6 characters required";
+  }
+
+  /* HANDLE USER POST ERRORS */
+  if (err.message === "unavailable") {
+    inputErrors.posts = "Post not found";
   }
 
   return inputErrors;

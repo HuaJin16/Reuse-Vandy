@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const handleErrors = require("../utils/errors");
 
-/* USER REGISTER */
+// register a new user using the User model and save their data to the database
 const register = async (req, res) => {
   try {
     const { firstName, lastName, email, password, avatar } = req.body;
@@ -23,7 +23,7 @@ const register = async (req, res) => {
   }
 };
 
-/* USER LOGIN */
+// authenticate user login credentials and generate a JWT for authorization
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -45,7 +45,7 @@ const login = async (req, res) => {
   }
 };
 
-/* USER LOGOUT */
+// logout the currently active user by clearing the access token cookie
 const logout = (req, res) => {
   try {
     res.clearCookie("access_token");

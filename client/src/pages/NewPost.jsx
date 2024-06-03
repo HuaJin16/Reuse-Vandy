@@ -10,7 +10,7 @@ import {
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-export default function New() {
+export default function NewPost() {
   const [files, setFiles] = useState([]);
   const [uploadPercentage, setUploadPercentage] = useState(0);
   const [formData, setFormData] = useState({
@@ -24,13 +24,16 @@ export default function New() {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
+  // function that manages the process of uploading images for a post
   const handleImageUpload = () => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
       const promises = [];
       for (let i = 0; i < files.length; ++i) {
         promises.push(uploadImage(files[i]));
       }
+      // Updates form data after all image uploads are resolved
       Promise.all(promises)
+        // urls represent the successfully uploaded images
         .then((urls) => {
           setFormData({
             ...formData,
@@ -51,14 +54,10 @@ export default function New() {
 
   const uploadImage = async (file) => {
     return new Promise((resolve, reject) => {
-      // create a root reference
-      const storage = getStorage(app);
-      // ensure each file name is unique
-      const fileName = new Date().getTime() + file.name;
-      // create a reference to the unique file name
-      const storageRef = ref(storage, fileName);
-      // upload the file
-      const uploadTask = uploadBytesResumable(storageRef, file);
+      const storage = getStorage(app); // create a root reference
+      const fileName = new Date().getTime() + file.name; // ensure each file name is unique
+      const storageRef = ref(storage, fileName); // create a reference to the unique file name
+      const uploadTask = uploadBytesResumable(storageRef, file); // upload the file
 
       // monitor upload progress
       uploadTask.on(
@@ -80,6 +79,7 @@ export default function New() {
     });
   };
 
+  // function to remove an image URL from formData state based on the provided index
   const handleRemoveImage = (index) => {
     setFormData({
       ...formData,
@@ -87,6 +87,7 @@ export default function New() {
     });
   };
 
+  // function to update form data and clear corresonding error states on input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setCreateErrors((prevCreateErrors) => ({
@@ -95,6 +96,7 @@ export default function New() {
     }));
   };
 
+  // function to submit newly created post data to the server
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {

@@ -16,36 +16,34 @@ import { Link } from "react-router-dom";
 export default function Profile() {
   const { currentUser } = useSelector((state) => state.user);
   const [showSection, setShowSection] = useState("posts");
-  const fileRef = useRef(null);
   const [file, setFile] = useState(undefined);
   const [uploadPercentage, setUploadPercentage] = useState(0);
   const [uploadError, setUploadError] = useState(false);
   const [formData, setFormData] = useState({});
-  const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [userPosts, setUserPosts] = useState([]);
+  const fileRef = useRef(null);
+  const dispatch = useDispatch();
 
   const handleSectionChange = (section) => {
     setShowSection(section);
   };
 
+  // calls handleFileUpload whenever the file variable changes
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
     }
   }, [file]);
 
+  // function to upload a file to a Firebase storage
   const handleFileUpload = (file) => {
-    // create a root reference
-    const storage = getStorage(app);
-    // ensure each file name is unique
-    const fileName = new Date().getTime() + file.name;
-    // create a reference to the unique file name
-    const storageRef = ref(storage, fileName);
-    // upload the file
-    const uploadTask = uploadBytesResumable(storageRef, file);
+    const storage = getStorage(app); // create a root reference
+    const fileName = new Date().getTime() + file.name; // ensure each file name is unique
+    const storageRef = ref(storage, fileName); // create a reference to the unique file name
+    const uploadTask = uploadBytesResumable(storageRef, file); // upload the file
 
     // monitor upload progress
     uploadTask.on(
@@ -66,10 +64,12 @@ export default function Profile() {
     );
   };
 
+  // function to handle input change and update form data
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // function to submit updated user data to the server and update Redux state
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -100,6 +100,7 @@ export default function Profile() {
     }
   };
 
+  // function to delete the current user's account and set Redux state to null
   const handleDeleteUser = async () => {
     try {
       const res = await fetch(
@@ -121,6 +122,7 @@ export default function Profile() {
     }
   };
 
+  // function to log out the current user and set Redux state to null
   const handleUserLogout = async () => {
     try {
       const res = await fetch(`http://localhost:8000/auth/logout`);
@@ -136,6 +138,7 @@ export default function Profile() {
     }
   };
 
+  // function to fetch and display the current user's posts
   const showPosts = async () => {
     try {
       const res = await fetch(
@@ -154,6 +157,7 @@ export default function Profile() {
     }
   };
 
+  // useEffect hook to fetch user's posts when the "post" section is shown
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -168,6 +172,7 @@ export default function Profile() {
     }
   }, [showSection]);
 
+  // function to delete a user's post on the server and remove it from local state
   const handleDeletePost = async (postId) => {
     try {
       const res = await fetch(`http://localhost:8000/post/delete/${postId}`, {
@@ -179,6 +184,7 @@ export default function Profile() {
         setErrors(data.postErrors);
       } else {
         setErrors({ posts: "" });
+        // remove the post from the database by comparing post and requested ID's
         setUserPosts((prev) => prev.filter((post) => post._id !== postId));
       }
     } catch (err) {

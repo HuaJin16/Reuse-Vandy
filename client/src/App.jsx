@@ -7,7 +7,7 @@ import Register from "./pages/Register";
 import PrivateRoute from "./components/PrivateRoute";
 import Header from "./components/Header";
 import Profile from "./pages/Profile";
-import New from "./pages/New";
+import NewPost from "./pages/NewPost";
 import EditPost from "./pages/EditPost";
 
 function App() {
@@ -35,7 +35,7 @@ function App() {
             path="/new"
             element={
               <>
-                <Header /> <New />
+                <Header /> <NewPost />
               </>
             }
           />

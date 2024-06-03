@@ -3,6 +3,7 @@ const handleErrors = require("../utils/errors");
 const bcrypt = require("bcrypt");
 const Post = require("../models/post.model");
 
+// update the user's infromation if authorized
 const updateUser = async (req, res) => {
   try {
     if (req.user.id !== req.params.id) throw Error("unauthorized");
@@ -18,6 +19,7 @@ const updateUser = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
       {
+        // replace the user's information with the provided value
         $set: {
           firstName: req.body.firstName,
           lastName: req.body.lastName,
@@ -25,9 +27,9 @@ const updateUser = async (req, res) => {
           avatar: req.body.avatar,
         },
       },
+      // return the user's updated document
       { new: true }
     );
-
     const { password, ...userInfo } = updatedUser._doc;
     res.status(200).json(userInfo);
   } catch (err) {
@@ -36,6 +38,7 @@ const updateUser = async (req, res) => {
   }
 };
 
+// delete the currently active user and removes their access token cookie
 const deleteUser = async (req, res) => {
   try {
     if (req.user.id !== req.params.id) throw Error("unauthorized");
@@ -49,6 +52,7 @@ const deleteUser = async (req, res) => {
   }
 };
 
+// retrieve all posts created by the specified user
 const getPosts = async (req, res) => {
   try {
     if (req.user.id !== req.params.id) throw Error("unauthorized");

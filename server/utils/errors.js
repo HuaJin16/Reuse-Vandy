@@ -1,5 +1,5 @@
 const handleErrors = (err) => {
-  inputErrors = {
+  errors = {
     firstName: "",
     lastName: "",
     email: "",
@@ -15,8 +15,8 @@ const handleErrors = (err) => {
 
   /* HANDLE DUPLICATE EMAIL ERROR*/
   if (err.code === 11000) {
-    inputErrors.email = "Email already associated with an account";
-    return inputErrors;
+    errors.email = "Email already associated with an account";
+    return errors;
   }
 
   /* HANDLE VALIDATION ERRORS */
@@ -27,38 +27,38 @@ const handleErrors = (err) => {
       err.message.includes("Post validation failed"))
   ) {
     Object.values(err.errors).forEach(({ properties }) => {
-      inputErrors[properties.path] = properties.message;
+      errors[properties.path] = properties.message;
     });
   }
 
   /* HANDLE INVALID LOGIN CREDENTIALS*/
   if (err.message === "invalid email") {
-    inputErrors.email = "Email address is not registered to an account";
+    errors.email = "Email address is not registered to an account";
   }
   if (err.message === "invalid password") {
-    inputErrors.password = "Invalid password for the provided email";
+    errors.password = "Invalid password for the provided email";
   }
 
   /* HANDLE AUTHENTICATION ERRORS */
   if (err.message === "unauthorized") {
-    inputErrors.auth = "You are not authenticated";
+    errors.auth = "You are not authenticated";
   }
   if (err.message === "invalid token") {
-    inputErrors.auth = "Invalid token";
+    errors.auth = "Invalid token";
   }
   if (err.message === "longer password required") {
-    inputErrors.password = "Minimum of 6 characters required";
+    errors.password = "Minimum of 6 characters required";
   }
 
   /* HANDLE USER POST ERRORS */
   if (err.message === "unavailable") {
-    inputErrors.posts = "Post not found";
+    errors.posts = "Post not found";
   }
   if (err.message == "invalid post ID") {
-    inputErrors.posts = "Invalid post ID";
+    errors.posts = "Invalid post ID";
   }
 
-  return inputErrors;
+  return errors;
 };
 
 module.exports = handleErrors;

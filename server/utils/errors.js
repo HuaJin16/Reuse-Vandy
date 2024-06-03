@@ -54,6 +54,9 @@ const handleErrors = (err) => {
   if (err.message === "unavailable") {
     inputErrors.posts = "Post not found";
   }
+  if (err.message == "invalid post ID") {
+    inputErrors.posts = "Invalid post ID";
+  }
 
   return inputErrors;
 };

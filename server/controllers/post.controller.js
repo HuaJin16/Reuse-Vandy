@@ -1,5 +1,6 @@
 const Post = require("../models/post.model");
 const handleErrors = require("../utils/errors");
+const mongoose = require("mongoose");
 
 const newPost = async (req, res) => {
   try {
@@ -27,4 +28,35 @@ const deletePost = async (req, res) => {
   }
 };
 
-module.exports = { newPost, deletePost };
+const editPost = async (req, res) => {
+  try {
+    const isValid = mongoose.isValidObjectId(req.params.id);
+    if (!isValid) throw Error("invalid post ID");
+
+    const post = await Post.findById(req.params.id);
+    if (!post) throw Error("unavailable");
+
+    if (req.user.id !== post.userRef) throw Error("unauthorized");
+
+    const editedPost = await Post.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.status(200).json(editedPost);
+  } catch (err) {
+    const postErrors = handleErrors(err);
+    return res.status(400).json({ postErrors });
+  }
+};
+
+const getPost = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) throw Error("unavailable");
+    res.status(200).json(post);
+  } catch (err) {
+    const postErrors = handleErrors(err);
+    return res.status(400).json({ postErrors });
+  }
+};
+
+module.exports = { newPost, deletePost, editPost, getPost };

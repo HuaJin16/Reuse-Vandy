@@ -250,7 +250,9 @@ export default function Profile() {
                       <button onClick={() => handleDeletePost(post._id)}>
                         Delete
                       </button>
-                      <button>Edit</button>
+                      <Link to={`/edit/${post._id}`}>
+                        <button>Edit</button>
+                      </Link>
                     </div>
                   </div>
                 ))}

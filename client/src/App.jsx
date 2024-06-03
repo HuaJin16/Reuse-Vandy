@@ -8,6 +8,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Header from "./components/Header";
 import Profile from "./pages/Profile";
 import New from "./pages/New";
+import EditPost from "./pages/EditPost";
 
 function App() {
   return (
@@ -35,6 +36,14 @@ function App() {
             element={
               <>
                 <Header /> <New />
+              </>
+            }
+          />
+          <Route
+            path="/edit/:postId"
+            element={
+              <>
+                <Header /> <EditPost />
               </>
             }
           />

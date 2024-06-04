@@ -16,10 +16,6 @@ const newPost = async (req, res) => {
 // delete a user post
 const deletePost = async (req, res) => {
   try {
-    // check if post ID is of ObjectId type
-    const isValid = mongoose.isValidObjectId(req.params.id);
-    if (!isValid) throw Error("invalid post ID");
-
     // check if the post exists
     const post = await Post.findById(req.params.id);
     if (!post) throw Error("unavailable");
@@ -37,10 +33,6 @@ const deletePost = async (req, res) => {
 // update an existing post
 const editPost = async (req, res) => {
   try {
-    // check if post ID is of ObjectId type
-    const isValid = mongoose.isValidObjectId(req.params.id);
-    if (!isValid) throw Error("invalid post ID");
-
     // check if the post exists
     const post = await Post.findById(req.params.id);
     if (!post) throw Error("unavailable");

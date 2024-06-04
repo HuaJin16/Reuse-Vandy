@@ -9,6 +9,7 @@ import Header from "./components/Header";
 import Profile from "./pages/Profile";
 import NewPost from "./pages/NewPost";
 import EditPost from "./pages/EditPost";
+import Post from "./pages/Post";
 
 function App() {
   return (
@@ -51,6 +52,15 @@ function App() {
         <Route path="/access" element={<Access />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route
+          path="/post/:postId"
+          element={
+            <>
+              <Header />
+              <Post />
+            </>
+          }
+        />
       </Routes>
     </>
   );

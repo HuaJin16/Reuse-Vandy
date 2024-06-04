@@ -54,8 +54,8 @@ const handleErrors = (err) => {
   if (err.message === "unavailable") {
     errors.posts = "Post not found";
   }
-  if (err.message == "invalid post ID") {
-    errors.posts = "Invalid post ID";
+  if (err.message.includes("Cast to ObjectId failed for value")) {
+    errors.posts = "Invalid post ID format";
   }
 
   return errors;

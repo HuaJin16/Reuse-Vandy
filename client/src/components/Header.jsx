@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoSearch } from "react-icons/io5";
 import { MdOutlineBookmarkAdd, MdOutlineNotifications } from "react-icons/md";
@@ -18,6 +18,15 @@ export default function Header() {
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
   };
+
+  // synchronizes search term state with URL query string
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchTermUrl = urlParams.get("searchTerm");
+    if (searchTermUrl) {
+      setSearchTerm(searchTermUrl);
+    }
+  }, [window.location.search]);
 
   return (
     <header>

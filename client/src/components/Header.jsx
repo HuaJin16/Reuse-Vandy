@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { IoSearch } from "react-icons/io5";
 import { MdOutlineBookmarkAdd, MdOutlineNotifications } from "react-icons/md";
 import { FiMessageSquare } from "react-icons/fi";
@@ -7,9 +7,16 @@ import { useSelector } from "react-redux";
 
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
+  // function to update URL with search term and navigate to search results page
   const handleSubmit = (e) => {
     e.preventDefault();
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set("searchTerm", searchTerm);
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
   };
 
   return (
@@ -25,6 +32,8 @@ export default function Header() {
             type="text"
             name="search"
             placeholder="Search items on Reuse..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
           <button>
             <IoSearch />

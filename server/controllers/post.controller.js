@@ -62,4 +62,33 @@ const getPost = async (req, res) => {
   }
 };
 
-module.exports = { newPost, deletePost, editPost, getPost };
+// retrieves a list of posts based on query parameters
+const getPosts = async (req, res) => {
+  try {
+    console.log(req.query);
+    const limit = parseInt(req.query.limit) || 32;
+    const startIndex = parseInt(req.query.startIndex) || 0;
+    const searchTerm = req.query.searchTerm || "";
+    const sort = req.query.sort || "createdAt";
+    const order = req.query.order || "desc";
+
+    // fetches posts matching the user's searchTerm in title or description
+    const posts = await Post.find({
+      $or: [
+        { title: { $regex: searchTerm, $options: "i" } },
+        { description: { $regex: searchTerm, $options: "i" } },
+      ],
+    })
+      // sort, limit, and paginate the posts
+      .sort({ [sort]: order })
+      .limit(limit)
+      .skip(startIndex);
+
+    return res.status(200).json(posts);
+  } catch (err) {
+    const postErrors = handleErrors(err);
+    return res.status(400).json({ postErrors });
+  }
+};
+
+module.exports = { newPost, deletePost, editPost, getPost, getPosts };

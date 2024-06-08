@@ -65,31 +65,33 @@ const getPost = async (req, res) => {
 // retrieves a list of posts based on query parameters
 const getPosts = async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit) || 32;
-    const startIndex = parseInt(req.query.startIndex) || 0;
+    const limit = parseInt(req.query.limit) || 2;
+    const page = parseInt(req.query.page) || 1;
+    const startIndex = (page - 1) * limit;
     const searchTerm = req.query.searchTerm || "";
     const sort = req.query.sort || "createdAt";
     const order = req.query.order || "desc";
 
-    // fetches posts matching the user's searchTerm in title or description
-    const posts = await Post.find({
+    // stores search criteria
+    const query = {
       $or: [
         { title: { $regex: searchTerm, $options: "i" } },
         { description: { $regex: searchTerm, $options: "i" } },
       ],
-    })
-      // sort, limit, and paginate the posts
+    };
+
+    const totalCount = await Post.countDocuments(query);
+    const totalPages = Math.ceil(totalCount / limit);
+
+    // fetches posts matching the user's searchTerm in title or description
+    const posts = await Post.find(query)
       .sort({ [sort]: order })
       .limit(limit)
       .skip(startIndex);
 
     // calculate the range of posts being displayed
-    const totalCount = posts.length;
     const startRange = startIndex + 1;
-    let endRange = limit;
-    if (startIndex + posts.length <= limit) {
-      endRange = startIndex + posts.length;
-    }
+    const endRange = Math.min(startIndex + posts.length, totalCount);
     let message = `${startRange}-${endRange} of ${totalCount} results for "${searchTerm}"`;
     if (totalCount === 0) {
       message = "";
@@ -97,11 +99,10 @@ const getPosts = async (req, res) => {
 
     return res.status(200).json({
       posts,
-      totalCount,
       postRange: message,
+      totalPages,
     });
   } catch (err) {
-    console.log(err);
     const postErrors = handleErrors(err);
     return res.status(400).json({ postErrors });
   }

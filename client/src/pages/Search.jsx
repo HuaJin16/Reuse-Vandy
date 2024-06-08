@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PostItem from "../components/PostItem";
+import { GrFormPreviousLink, GrFormNextLink } from "react-icons/gr";
 
 export default function () {
   const [sidebarData, setSidebarData] = useState({
@@ -10,6 +11,8 @@ export default function () {
   });
   const [posts, setPosts] = useState([]);
   const [postRange, setPostRange] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
 
   // function to handle input changes to update sidebarData
@@ -53,15 +56,30 @@ export default function () {
     // fetch posts from the server based on current URL parameters
     const getPosts = async () => {
       const searchQuery = urlParams.toString();
-      const res = await fetch(`http://localhost:8000/post/get?${searchQuery}`);
+      const res = await fetch(
+        `http://localhost:8000/post/get?${searchQuery}&page=${currentPage}`
+      );
       const data = await res.json();
       setPosts(data.posts);
       setPostRange(data.postRange);
+      setTotalPages(data.totalPages);
     };
 
     getPosts();
     // run whenever the URL search query changes or the component mounts
-  }, [window.location.search]);
+  }, [window.location.search, currentPage]);
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
   return (
     <div>
@@ -103,6 +121,24 @@ export default function () {
           {posts.map((post) => (
             <PostItem key={post._id} post={post} />
           ))}
+        </div>
+        <div>
+          {posts.length !== 0 && (
+            <div>
+              <button onClick={handlePrevPage} disabled={currentPage === 1}>
+                <GrFormPreviousLink /> Previous
+              </button>
+              <span>
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+              >
+                Next <GrFormNextLink />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

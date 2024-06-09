@@ -31,9 +31,15 @@ export default function Header() {
   return (
     <header>
       <div>
-        <Link to="/access">
-          <span>Reuse, Vandy!</span>
-        </Link>
+        {currentUser ? (
+          <Link to="/">
+            <span>Reuse, Vandy!</span>
+          </Link>
+        ) : (
+          <Link to="/access">
+            <span>Reuse, Vandy!</span>
+          </Link>
+        )}
       </div>
       <div>
         <form onSubmit={handleSubmit}>

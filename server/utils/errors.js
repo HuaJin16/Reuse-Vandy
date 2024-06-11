@@ -57,6 +57,9 @@ const handleErrors = (err) => {
   if (err.message.includes("Cast to ObjectId failed for value")) {
     errors.posts = "Invalid post ID format";
   }
+  if (err.message === "No saved posts found") {
+    errors.posts = "No saved posts found";
+  }
 
   return errors;
 };

@@ -11,6 +11,7 @@ import NewPost from "./pages/NewPost";
 import EditPost from "./pages/EditPost";
 import Post from "./pages/Post";
 import Search from "./pages/Search";
+import SavedPosts from "./pages/SavedPosts";
 
 function App() {
   const location = useLocation();
@@ -25,6 +26,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/new" element={<NewPost />} />
           <Route path="/edit/:postId" element={<EditPost />} />
+          <Route path="/saved" element={<SavedPosts />} />
         </Route>
         <Route path="/access" element={<Access />} />
         <Route path="/login" element={<Login />} />

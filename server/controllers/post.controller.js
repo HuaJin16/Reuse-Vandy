@@ -1,6 +1,8 @@
 const Post = require("../models/post.model");
 const handleErrors = require("../utils/errors");
-const mongoose = require("mongoose");
+const Notification = require("../models/notification.model");
+const SavedPost = require("../models/savedPost.model");
+const User = require("../models/user.model");
 
 // create a new user post using the Post model
 const newPost = async (req, res) => {
@@ -22,6 +24,39 @@ const deletePost = async (req, res) => {
 
     // check if user is the owner of the post
     if (req.user.id !== post.userRef) throw Error("unauthorized");
+
+    // retrieve the SavedPost document for the given post ID
+    const savedPostDoc = await SavedPost.findOne({
+      savedPosts: req.params.id,
+    });
+    if (!savedPostDoc) throw Error("unavailable");
+
+    // get the recipient's details from the savedPostDoc
+    const recipientId = savedPostDoc.userId.toString();
+    const recipient = await User.findById(recipientId);
+    const recipientName = `${recipient.firstName} ${recipient.lastName}`;
+
+    // get the sender's details from the post
+    const senderId = post.userRef.toString();
+    const sender = await User.findById(senderId);
+    const senderName = `${sender.firstName} ${sender.lastName}`;
+
+    // create a notification for the deleted post
+    const notification = new Notification({
+      recipientId,
+      recipientName,
+      senderId,
+      senderName,
+      postInfo: {
+        postId: req.params.id,
+        title: post.title,
+        imageUrls: post.imageUrls,
+      },
+      notifType: "post_deleted",
+      read: false,
+    });
+    await notification.save();
+
     await Post.findByIdAndDelete(req.params.id);
     res.status(200).json("Post deleted");
   } catch (err) {

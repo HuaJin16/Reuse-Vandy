@@ -1,4 +1,5 @@
 const Notification = require("../models/notification.model");
+const handleErrors = require("../utils/errors");
 
 // retrieve all notifications for the user, including post details
 const getNotifications = async (req, res) => {
@@ -6,10 +7,31 @@ const getNotifications = async (req, res) => {
     const notifications = await Notification.find({
       recipientId: req.params.userId,
     }).populate("postInfo");
+    if (notifications.length === 0) throw Error("No notifications found");
+
     res.status(200).json(notifications);
   } catch (err) {
-    res.status(400).json({ error: err.message });
+    const notificationErrors = handleErrors(err);
+    res.status(400).json(notificationErrors);
   }
 };
 
-module.exports = { getNotifications };
+// mark a notification as read by updating its "read" property to true
+const updateNotificationAsRead = async (req, res) => {
+  try {
+    const notification = await Notification.findById(req.params.notificationId);
+    if (!notification) throw Error("No notifications found");
+
+    const updatedReadStatus = await Notification.findByIdAndUpdate(
+      req.params.notificationId,
+      { read: true },
+      { new: true }
+    );
+    res.status(200).json(updatedReadStatus);
+  } catch (err) {
+    const notificationErrors = handleErrors(err);
+    res.status(400).json(notificationErrors);
+  }
+};
+
+module.exports = { getNotifications, updateNotificationAsRead };

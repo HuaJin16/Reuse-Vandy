@@ -11,6 +11,7 @@ const handleErrors = (err) => {
     imageURLs: "",
     userRef: "",
     posts: "",
+    notifications: "",
   };
 
   /* HANDLE DUPLICATE EMAIL ERROR*/
@@ -54,11 +55,23 @@ const handleErrors = (err) => {
   if (err.message === "unavailable") {
     errors.posts = "Post not found";
   }
-  if (err.message.includes("Cast to ObjectId failed for value")) {
-    errors.posts = "Invalid post ID format";
-  }
   if (err.message === "No saved posts found") {
     errors.posts = "No saved posts found";
+  }
+
+  /* HANDLE NOTIFICATION ERRORS */
+  if (err.message === "No notifications found") {
+    error.notifications = "Notification(s) not found";
+  }
+
+  /* HANDLE MONGOOSE ERRROS */
+  if (err.message.includes("Cast to ObjectId failed for value")) {
+    if (err.message.includes("Post")) {
+      errors.posts = "Invalid post ID format";
+    }
+    if (err.message.includes("Notification")) {
+      errors.notifications = "Invalid notification ID format";
+    }
   }
 
   return errors;

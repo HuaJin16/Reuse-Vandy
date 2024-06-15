@@ -34,4 +34,22 @@ const updateNotificationAsRead = async (req, res) => {
   }
 };
 
-module.exports = { getNotifications, updateNotificationAsRead };
+// delete a notification by its ID
+const deleteNotification = async (req, res) => {
+  try {
+    const notification = await Notification.findById(req.params.notificationId);
+    if (!notification) throw Error("No notifications found");
+
+    await Notification.findByIdAndDelete(req.params.notificationId);
+    res.status(200).json("Notification deleted");
+  } catch (err) {
+    const notificationErrors = handleErrors(err);
+    res.status(400).json(notificationErrors);
+  }
+};
+
+module.exports = {
+  getNotifications,
+  updateNotificationAsRead,
+  deleteNotification,
+};

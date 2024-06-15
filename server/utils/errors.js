@@ -61,7 +61,7 @@ const handleErrors = (err) => {
 
   /* HANDLE NOTIFICATION ERRORS */
   if (err.message === "No notifications found") {
-    error.notifications = "Notification(s) not found";
+    errors.notifications = "Notification(s) not found";
   }
 
   /* HANDLE MONGOOSE ERRROS */

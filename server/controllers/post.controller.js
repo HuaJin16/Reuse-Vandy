@@ -29,33 +29,34 @@ const deletePost = async (req, res) => {
     const savedPostDoc = await SavedPost.findOne({
       savedPosts: req.params.id,
     });
-    if (!savedPostDoc) throw Error("unavailable");
 
-    // get the recipient's details from the savedPostDoc
-    const recipientId = savedPostDoc.userId.toString();
-    const recipient = await User.findById(recipientId);
-    const recipientName = `${recipient.firstName} ${recipient.lastName}`;
+    if (savedPostDoc) {
+      // get the recipient's details from the savedPostDoc
+      const recipientId = savedPostDoc.userId.toString();
+      const recipient = await User.findById(recipientId);
+      const recipientName = `${recipient.firstName} ${recipient.lastName}`;
 
-    // get the sender's details from the post
-    const senderId = post.userRef.toString();
-    const sender = await User.findById(senderId);
-    const senderName = `${sender.firstName} ${sender.lastName}`;
+      // get the sender's details from the post
+      const senderId = post.userRef.toString();
+      const sender = await User.findById(senderId);
+      const senderName = `${sender.firstName} ${sender.lastName}`;
 
-    // create a notification for the deleted post
-    const notification = new Notification({
-      recipientId,
-      recipientName,
-      senderId,
-      senderName,
-      postInfo: {
-        postId: req.params.id,
-        title: post.title,
-        imageUrls: post.imageUrls,
-      },
-      notifType: "post_deleted",
-      read: false,
-    });
-    await notification.save();
+      // create a notification for the deleted post
+      const notification = new Notification({
+        recipientId,
+        recipientName,
+        senderId,
+        senderName,
+        postInfo: {
+          postId: req.params.id,
+          title: post.title,
+          imageUrls: post.imageUrls,
+        },
+        notifType: "post_deleted",
+        read: false,
+      });
+      await notification.save();
+    }
 
     await Post.findByIdAndDelete(req.params.id);
     res.status(200).json("Post deleted");

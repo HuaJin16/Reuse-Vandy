@@ -9,6 +9,7 @@ import {
 } from "firebase/storage";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import CheckboxInput from "../components/CheckboxInput";
 
 export default function NewPost() {
   const [files, setFiles] = useState([]);
@@ -18,6 +19,19 @@ export default function NewPost() {
     price: "",
     description: "",
     imageUrls: [],
+    tickets: false,
+    clothes: false,
+    merch: false,
+    electronics: false,
+    furniture: false,
+    housing: false,
+    books: false,
+    miscellaneous: false,
+    new: false,
+    lightlyUsed: false,
+    used: false,
+    obo: false,
+    free: false,
   });
   const [uploadError, setUploadError] = useState(false);
   const [createErrors, setCreateErrors] = useState(false);
@@ -89,7 +103,31 @@ export default function NewPost() {
 
   // function to update form data and clear corresonding error states on input changes
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { type, name, checked, value } = e.target;
+    const isCheckbox = type === "checkbox";
+    // ensure only one condition can be checked at a time
+    if (name === "new" || name === "lightlyUsed" || name === "used") {
+      setFormData({
+        ...formData,
+        new: name === "new" ? checked : false,
+        lightlyUsed: name === "lightlyUsed" ? checked : false,
+        used: name === "used" ? checked : false,
+      });
+    }
+    // ensure only one of "obo" or "free" can be checked at a time
+    else if (name === "obo" || name === "free") {
+      setFormData({
+        ...formData,
+        obo: name === "obo" ? checked : false,
+        free: name === "free" ? checked : false,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: isCheckbox ? checked : value,
+      });
+    }
+
     setCreateErrors((prevCreateErrors) => ({
       ...prevCreateErrors,
       [e.target.name]: "",
@@ -115,7 +153,25 @@ export default function NewPost() {
       if (data.postErrors) {
         setCreateErrors(data.postErrors);
       } else {
-        setFormData({ type: "", price: "", description: "", imageUrls: [] });
+        setFormData({
+          type: "",
+          price: "",
+          description: "",
+          imageUrls: [],
+          tickets: false,
+          clothes: false,
+          merch: false,
+          electronics: false,
+          furniture: false,
+          housing: false,
+          books: false,
+          miscellaneous: false,
+          new: false,
+          lightlyUsed: false,
+          used: false,
+          obo: false,
+          free: false,
+        });
         setFiles([]);
         setUploadPercentage(0);
         setUploadError(false);
@@ -125,6 +181,52 @@ export default function NewPost() {
     } catch (err) {
       setCreateErrors({ general: err.message });
     }
+  };
+
+  // function to get the label text for a given key
+  const getDisplayText = (key) => {
+    const mapping = {
+      tickets: "Tickets",
+      clothes: "Clothes",
+      merch: "Merch",
+      electronics: "Electronics",
+      furniture: "Furniture",
+      housing: "Housing",
+      books: "Books",
+      miscellaneous: "Miscellaneous",
+      new: "New",
+      lightlyUsed: "Lightly Used",
+      used: "Used",
+      obo: "OBO",
+      free: "Free",
+    };
+    return mapping[key];
+  };
+
+  const categories = [
+    "tickets",
+    "clothes",
+    "merch",
+    "electronics",
+    "furniture",
+    "housing",
+    "books",
+    "miscellaneous",
+  ];
+
+  const tags = ["new", "lightlyUsed", "used", "obo", "free"];
+
+  // function to display categories and tags as checkbox inputs
+  const renderCheckboxes = (keys) => {
+    return keys.map((key) => (
+      <CheckboxInput
+        key={key}
+        label={getDisplayText(key)}
+        name={key}
+        checked={formData[key]}
+        onChange={handleChange}
+      />
+    ));
   };
 
   return (
@@ -181,6 +283,12 @@ export default function NewPost() {
               </button>
             </div>
           ))}
+        </div>
+        <div>
+          <span>Categories:</span>
+          {renderCheckboxes(categories)}
+          <span>Tags:</span>
+          {renderCheckboxes(tags)}
         </div>
         <button disabled={uploadPercentage > 0 && uploadPercentage < 100}>
           Create

@@ -33,6 +33,33 @@ export default function Post() {
     getPost();
   }, [params.postId]);
 
+  // fucntion to return an array of true checkbox inputs
+  const getTrueCheckboxes = () => {
+    const trueCheckboxes = Object.keys(post).filter(
+      (key) => typeof post[key] === "boolean" && post[key] === true
+    );
+    return trueCheckboxes;
+  };
+
+  const getDisplayText = (key) => {
+    const mapping = {
+      tickets: "Tickets",
+      clothes: "Clothes",
+      merch: "Merch",
+      electronics: "Electronics",
+      furniture: "Furniture",
+      housing: "Housing",
+      books: "Books",
+      miscellaneous: "Miscellaneous",
+      new: "New",
+      lightlyUsed: "Lightly Used",
+      used: "Used",
+      obo: "OBO",
+      free: "Free",
+    };
+    return mapping[key];
+  };
+
   return (
     <div>
       {(errors.posts || errors.general) && (errors.posts || errors.general)}
@@ -48,6 +75,9 @@ export default function Post() {
           <div>
             <p>{post.title}</p>
             <p>${post.price}</p>
+            {getTrueCheckboxes().map((key) => (
+              <p key={key}>{getDisplayText(key)}</p>
+            ))}
             <p>{post.description}</p>
             <p>Posted on {new Date(post.createdAt).toLocaleDateString()}</p>
             <button>

@@ -29,6 +29,58 @@ const postSchema = new mongoose.Schema(
       type: String,
       required: [true, "A valid user reference is required"],
     },
+    tickets: {
+      type: Boolean,
+      default: false,
+    },
+    clothes: {
+      type: Boolean,
+      default: false,
+    },
+    merch: {
+      type: Boolean,
+      default: false,
+    },
+    electronics: {
+      type: Boolean,
+      default: false,
+    },
+    furniture: {
+      type: Boolean,
+      default: false,
+    },
+    housing: {
+      type: Boolean,
+      default: false,
+    },
+    books: {
+      type: Boolean,
+      default: false,
+    },
+    miscellaneous: {
+      type: Boolean,
+      default: false,
+    },
+    new: {
+      type: Boolean,
+      default: false,
+    },
+    lightlyUsed: {
+      type: Boolean,
+      default: false,
+    },
+    used: {
+      type: Boolean,
+      default: false,
+    },
+    obo: {
+      type: Boolean,
+      default: false,
+    },
+    free: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

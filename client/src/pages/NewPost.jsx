@@ -223,6 +223,7 @@ export default function NewPost() {
         key={key}
         label={getDisplayText(key)}
         name={key}
+        value={key}
         checked={formData[key]}
         onChange={handleChange}
       />

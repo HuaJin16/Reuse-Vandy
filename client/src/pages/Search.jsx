@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PostItem from "../components/PostItem";
 import { GrFormPreviousLink, GrFormNextLink } from "react-icons/gr";
+import CheckboxInput from "../components/CheckboxInput";
 
 export default function () {
   const [sidebarData, setSidebarData] = useState({
     searchTerm: "",
     sort: "createdAt",
     order: "desc",
+    category: "",
+    tags: [],
   });
   const [posts, setPosts] = useState([]);
   const [postRange, setPostRange] = useState("");
@@ -15,10 +18,51 @@ export default function () {
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
 
+  const tags = ["new", "lightlyUsed", "used", "obo", "free"];
+
+  const getDisplayText = (key) => {
+    const mapping = {
+      new: "New",
+      lightlyUsed: "Lightly Used",
+      used: "Used",
+      obo: "OBO",
+      free: "Free",
+    };
+    return mapping[key];
+  };
+
   // function to handle input changes to update sidebarData
   const handleChange = (e) => {
     if (e.target.name === "search") {
       setSidebarData({ ...sidebarData, searchTerm: e.target.value });
+    }
+
+    if (e.target.name === "category") {
+      setSidebarData({ ...sidebarData, category: e.target.value });
+    }
+
+    if (e.target.name === "tags") {
+      const tag = e.target.value;
+      const checked = e.target.checked;
+
+      // only add the tag if the checkbox is selected
+      if (checked) {
+        // add the new tag to the existing tags array, or start a new array if empty.
+        setSidebarData({
+          ...sidebarData,
+          tags:
+            sidebarData.tags && sidebarData.tags.length > 0
+              ? [...sidebarData.tags, tag]
+              : [tag],
+        });
+      }
+      // remove the unselected tag from the tags array
+      else {
+        const updatedTags = sidebarData.tags.filter(
+          (filteredTag) => filteredTag != tag
+        );
+        setSidebarData({ ...sidebarData, tags: updatedTags });
+      }
     }
 
     if (e.target.name === "sortOrder") {
@@ -34,6 +78,8 @@ export default function () {
     urlParams.set("searchTerm", sidebarData.searchTerm);
     urlParams.set("sort", sidebarData.sort);
     urlParams.set("order", sidebarData.order);
+    urlParams.set("category", sidebarData.category);
+    urlParams.set("tags", sidebarData.tags);
     const searchQuery = urlParams.toString();
     navigate(`/search?${searchQuery}`);
   };
@@ -44,12 +90,16 @@ export default function () {
     const searchTermUrl = urlParams.get("searchTerm");
     const sortUrl = urlParams.get("sort");
     const orderUrl = urlParams.get("order");
+    const categoryUrl = urlParams.get("category");
+    const tagsUrl = urlParams.get("tags");
 
-    if (searchTermUrl || sortUrl || orderUrl) {
+    if (searchTermUrl || sortUrl || orderUrl || categoryUrl || tagsUrl) {
       setSidebarData({
         searchTerm: searchTermUrl || "",
         sort: sortUrl || "createdAt",
         order: orderUrl || "desc",
+        category: categoryUrl || "",
+        tags: tagsUrl ? tagsUrl.split(",") : [],
       });
     }
 
@@ -97,6 +147,37 @@ export default function () {
               value={sidebarData.searchTerm}
               onChange={handleChange}
             />
+          </div>
+          <div>
+            <label>Category:</label>
+            <select
+              name="category"
+              onChange={handleChange}
+              value={sidebarData.category}
+            >
+              <option value="">All Categories</option>
+              <option value="tickets">Tickets</option>
+              <option value="clothes">Clothes</option>
+              <option value="merch">Merch</option>
+              <option value="electronics">Electronics</option>
+              <option value="furniture">Furniture</option>
+              <option value="housing">Housing</option>
+              <option value="books">Books</option>
+              <option value="miscellaneous">Miscellaneous</option>
+            </select>
+          </div>
+          <div>
+            <label>Tags:</label>
+            {tags.map((key) => (
+              <CheckboxInput
+                key={key}
+                label={getDisplayText(key)}
+                name="tags"
+                value={key}
+                onChange={handleChange}
+                checked={sidebarData.tags.includes(key)}
+              />
+            ))}
           </div>
           <div>
             <label>Sort:</label>

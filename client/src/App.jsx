@@ -13,6 +13,7 @@ import Post from "./pages/Post";
 import Search from "./pages/Search";
 import SavedPosts from "./pages/SavedPosts";
 import Notifications from "./pages/Notifications";
+import CategoryButtons from "./components/CategoryButtons";
 
 function App() {
   const location = useLocation();
@@ -21,6 +22,7 @@ function App() {
   return (
     <>
       {!hideHeaderRoutes.includes(location.pathname) && <Header />}
+      {!hideHeaderRoutes.includes(location.pathname) && <CategoryButtons />}
       <Routes>
         <Route element={<PrivateRoute />}>
           <Route path="/" element={<Home />} />

@@ -107,14 +107,28 @@ const getPosts = async (req, res) => {
     const searchTerm = req.query.searchTerm || "";
     const sort = req.query.sort || "createdAt";
     const order = req.query.order || "desc";
+    const category = req.query.category || "";
+    const tagsQuery = req.query.tags ? req.query.tags.split(",") : [];
 
     // stores search criteria
     const query = {
-      $or: [
-        { title: { $regex: searchTerm, $options: "i" } },
-        { description: { $regex: searchTerm, $options: "i" } },
+      $and: [
+        {
+          $or: [
+            { title: { $regex: searchTerm, $options: "i" } },
+            { description: { $regex: searchTerm, $options: "i" } },
+          ],
+        },
       ],
     };
+
+    if (category) {
+      query.$and.push({ [category]: true });
+    }
+
+    if (tagsQuery.length > 0) {
+      query.$and.push({ $or: tagsQuery.map((tag) => ({ [tag]: true })) });
+    }
 
     const totalCount = await Post.countDocuments(query);
     const totalPages = Math.ceil(totalCount / limit);

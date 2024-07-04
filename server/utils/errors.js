@@ -12,6 +12,7 @@ const handleErrors = (err) => {
     userRef: "",
     posts: "",
     notifications: "",
+    messages: "",
   };
 
   /* HANDLE DUPLICATE EMAIL ERROR*/
@@ -64,6 +65,14 @@ const handleErrors = (err) => {
     errors.notifications = "Notification(s) not found";
   }
 
+  /* HANDLE MESSAGE ERRORS */
+  if (err.message === "Recipient not found") {
+    errors.messages = "Recipient not found";
+  }
+  if (err.message === "No conversation found") {
+    errors.messages = "No conversation found";
+  }
+
   /* HANDLE MONGOOSE ERRROS */
   if (err.message.includes("Cast to ObjectId failed for value")) {
     if (err.message.includes("Post")) {
@@ -71,6 +80,9 @@ const handleErrors = (err) => {
     }
     if (err.message.includes("Notification")) {
       errors.notifications = "Invalid notification ID format";
+    }
+    if (err.message.includes("Conversation")) {
+      errors.messages = "Invalid notification ID format";
     }
   }
 

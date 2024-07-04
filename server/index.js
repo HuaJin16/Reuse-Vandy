@@ -7,6 +7,7 @@ const userRoutes = require("./routes/user.route");
 const cookieParser = require("cookie-parser");
 const postRoutes = require("./routes/post.route");
 const notificationRoutes = require("./routes/notification.route");
+const messageRoutes = require("./routes/message.route");
 
 /* CONFIGURATIONS */
 const app = express();
@@ -35,6 +36,7 @@ app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/post", postRoutes);
 app.use("/notification", notificationRoutes);
+app.use("/message", messageRoutes);
 
 /* SERVER CONNECTION */
 const PORT = process.env.PORT || 8000;

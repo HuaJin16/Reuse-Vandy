@@ -4,6 +4,21 @@ const bcrypt = require("bcrypt");
 const Post = require("../models/post.model");
 const SavedPost = require("../models/savedPost.model");
 
+// retrieve the specified user's information
+const getUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+      throw Error("Recipient not found");
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    const authErrors = handleErrors(err);
+    return res.status(400).json({ authErrors });
+  }
+};
+
 // update the user's infromation if authorized
 const updateUser = async (req, res) => {
   try {
@@ -133,6 +148,7 @@ const getSavedPosts = async (req, res) => {
 };
 
 module.exports = {
+  getUser,
   updateUser,
   deleteUser,
   getPosts,

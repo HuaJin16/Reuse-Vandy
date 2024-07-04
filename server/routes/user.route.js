@@ -1,6 +1,7 @@
 const express = require("express");
 const { verifyToken } = require("../middleware/verifyUser");
 const {
+  getUser,
   updateUser,
   deleteUser,
   getPosts,
@@ -10,6 +11,7 @@ const {
 
 const router = express.Router();
 
+router.get("/:userId", verifyToken, getUser);
 router.post("/update/:id", verifyToken, updateUser);
 router.delete("/delete/:id", verifyToken, deleteUser);
 router.get("/posts/:id", verifyToken, getPosts);

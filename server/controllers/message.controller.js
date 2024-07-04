@@ -37,6 +37,9 @@ const sendMessage = async (req, res) => {
     await conversation.save();
     await newMessages.save();
 
+    // emit the new message to all connected clients
+    req.app.get("io").emit("new_message", newMessages);
+
     res.status(201).json(newMessages);
   } catch (err) {
     const messageErrors = handleErrors(err);

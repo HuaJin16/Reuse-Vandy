@@ -14,6 +14,7 @@ import Search from "./pages/Search";
 import SavedPosts from "./pages/SavedPosts";
 import Notifications from "./pages/Notifications";
 import CategoryButtons from "./components/CategoryButtons";
+import Message from "./pages/Message";
 
 function App() {
   const location = useLocation();
@@ -31,6 +32,7 @@ function App() {
           <Route path="/edit/:postId" element={<EditPost />} />
           <Route path="/saved" element={<SavedPosts />} />
           <Route path="/notifications" element={<Notifications />} />
+          <Route path="/message/:recipientId" element={<Message />} />
         </Route>
         <Route path="/access" element={<Access />} />
         <Route path="/login" element={<Login />} />

@@ -6,6 +6,7 @@ import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
 import { IoStorefrontOutline } from "react-icons/io5";
 import { BiMessageDetail } from "react-icons/bi";
+import { Link } from "react-router-dom";
 
 export default function Post() {
   const [errors, setErrors] = useState({});
@@ -83,9 +84,11 @@ export default function Post() {
             <button>
               <IoStorefrontOutline /> Reserve
             </button>
-            <button>
-              <BiMessageDetail /> Message
-            </button>
+            <Link to={`/message/${post.userRef}`}>
+              <button>
+                <BiMessageDetail /> Message
+              </button>
+            </Link>
           </div>
         </div>
       )}

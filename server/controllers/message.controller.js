@@ -74,4 +74,35 @@ const getMessages = async (req, res) => {
   }
 };
 
-module.exports = { sendMessage, getMessages };
+// retrieves a list of all conversations for the current user
+const getMessagesList = async (req, res) => {
+  try {
+    const conversations = await Conversation.find({
+      users: req.user.id,
+    })
+      .populate("users", "firstName lastName avatar")
+      .populate("messages");
+
+    if (!conversations) {
+      throw Error("No conversation found");
+    }
+
+    const messagesList = conversations.map((conv) => {
+      const otherUser = conv.users.find(
+        (user) => user._id.toString() !== req.user.id
+      );
+      return {
+        conversationId: conv._id,
+        recipient: otherUser,
+        lastMessage: conv.messages[conv.messages.length - 1],
+      };
+    });
+
+    res.status(200).json(messagesList);
+  } catch (err) {
+    const messageErrors = handleErrors(err);
+    res.status(400).json({ messageErrors });
+  }
+};
+
+module.exports = { sendMessage, getMessages, getMessagesList };

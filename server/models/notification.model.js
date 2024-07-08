@@ -24,15 +24,12 @@ const notificationSchema = new mongoose.Schema(
       postId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post",
-        required: true,
       },
       title: {
         type: String,
-        required: true,
       },
       imageUrls: {
         type: [String],
-        required: true,
       },
     },
     notifType: {

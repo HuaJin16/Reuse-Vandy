@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import NotificationItem from "../components/NotificationItem";
+import "../styles/Notifications.css";
 
 export default function Notification() {
   const [unreadNotifications, setUnreadNotifications] = useState([]);
@@ -116,17 +117,21 @@ export default function Notification() {
   };
 
   return (
-    <div>
-      <h2>Notifications</h2>
-      <p>Note: Notifications expire after 30 days</p>
+    <div className="notification-container">
+      <div className="notification-header">
+        <h2 className="notification-name">Notifications</h2>
+        <p className="notification-note">
+          Note: Notifications expire after 30 days
+        </p>
+      </div>
       {errors.notification || errors.general ? (
         <span>{errors.notification || errors.general}</span>
       ) : (
-        <div>
+        <div className="notification-render">
           {unreadNotifications.length > 0 ? (
-            <div>
-              <h3>Unread Notifications</h3>
-              <ul>
+            <div className="notification-unread">
+              <h3 className="notification-heading">Unread Notifications</h3>
+              <ul className="notification-list">
                 {unreadNotifications.map((notification) => (
                   <NotificationItem
                     key={notification._id}
@@ -134,6 +139,7 @@ export default function Notification() {
                     onMarkAsRead={handleNotificationAsRead}
                     onDelete={handleDeleteNotification}
                     getExpirationTime={getExpirationTime}
+                    className="notification-item"
                   />
                 ))}
               </ul>
@@ -142,21 +148,20 @@ export default function Notification() {
             "No unread notifications"
           )}
           {showReadNotifications && readNotifications.length > 0 ? (
-            <div>
-              <div>
-                <h3>Read Notifications</h3>
-                <ul>
-                  {readNotifications.map((notification) => (
-                    <NotificationItem
-                      key={notification._id}
-                      notification={notification}
-                      onMarkAsRead={handleNotificationAsRead}
-                      onDelete={handleDeleteNotification}
-                      getExpirationTime={getExpirationTime}
-                    />
-                  ))}
-                </ul>
-              </div>
+            <div className="notification-read">
+              <h3 className="notification-heading">Read Notifications</h3>
+              <ul className="notification-list">
+                {readNotifications.map((notification) => (
+                  <NotificationItem
+                    key={notification._id}
+                    notification={notification}
+                    onMarkAsRead={handleNotificationAsRead}
+                    onDelete={handleDeleteNotification}
+                    getExpirationTime={getExpirationTime}
+                    className="notification-item"
+                  />
+                ))}
+              </ul>
             </div>
           ) : showReadNotifications ? (
             "No read notifications"
@@ -165,7 +170,10 @@ export default function Notification() {
           )}
         </div>
       )}
-      <button onClick={() => setShowReadNotifications(!showReadNotifications)}>
+      <button
+        onClick={() => setShowReadNotifications(!showReadNotifications)}
+        className="notification-button"
+      >
         {showReadNotifications
           ? "Hide Read Notifications"
           : "Show Read Notifications"}

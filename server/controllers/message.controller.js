@@ -1,6 +1,7 @@
 const Conversation = require("../models/conversation.model");
 const Message = require("../models/message.model");
 const User = require("../models/user.model");
+const Notification = require("../models/notification.model");
 const handleErrors = require("../utils/errors");
 
 // send a message to a specified user and updates the conversation
@@ -14,6 +15,8 @@ const sendMessage = async (req, res) => {
     if (!recipient) {
       throw Error("Recipient not found");
     }
+
+    const sender = await User.findById(senderId);
 
     let conversation = await Conversation.findOne({
       users: { $all: [senderId, recipientId] },
@@ -36,6 +39,18 @@ const sendMessage = async (req, res) => {
 
     await conversation.save();
     await newMessages.save();
+
+    // create a notification for the recipient
+    const notification = new Notification({
+      recipientId,
+      recipientName: recipient.firstName + " " + recipient.lastName,
+      senderId,
+      senderName: sender.firstName + " " + sender.lastName,
+      notifType: "new_message",
+      read: false,
+    });
+
+    await notification.save();
 
     // emit the new message to all connected clients
     req.app.get("io").emit("new_message", newMessages);

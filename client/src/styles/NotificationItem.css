@@ -1,0 +1,95 @@
+.notification-item {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+}
+
+.expiration-time {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  margin-right: 0.5rem;
+}
+
+.expiration-time span {
+  border-bottom: 1px solid #ccc;
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.notification-render {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-grow: 1;
+  margin-right: 1rem;
+}
+
+.notification-deleted {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.notification-message {
+  font-size: 1rem;
+  color: #333;
+}
+
+.notification-image {
+  height: 50px;
+  width: 50px;
+  margin-right: 1rem;
+  margin-left: 0.5rem;
+  object-fit: cover;
+}
+
+.notification-new span {
+  color: #333;
+  font-size: 1rem;
+}
+
+.notification-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+}
+
+.notification-read,
+.notification-delete {
+  background: transparent;
+  border: none;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  margin: 0.2rem;
+}
+
+.notification-read:hover,
+.notification-delete:hover,
+.notification-new span:hover {
+  color: #0084ff;
+}
+
+@media (max-width: 768px) {
+  .notification-content {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 0.2rem;
+  }
+
+  .notification-buttons {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+}

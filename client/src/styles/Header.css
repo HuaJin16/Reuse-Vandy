@@ -3,14 +3,18 @@
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: 1.5rem 2rem;
   border: 1px solid #ccc;
   border-radius: 20px;
   margin-bottom: 1rem;
   width: 100%;
+  max-width: 1280px;
 }
 
 .logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex: 1;
 }
 
@@ -20,6 +24,7 @@
   color: #fad25a;
   font-family: "Oswald", cursive;
   margin-right: 1.5rem;
+  white-space: nowrap;
 }
 
 .search-container {
@@ -48,6 +53,9 @@
 }
 
 .nav-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex: 1;
 }
 
@@ -83,4 +91,22 @@
 .profile-name {
   font-size: 1rem;
   color: #333;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .logo-container,
+  .search-container,
+  .nav-container {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .nav-item {
+    margin: 0.5rem;
+  }
 }

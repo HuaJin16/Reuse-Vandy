@@ -1,0 +1,79 @@
+.notification-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  max-width: 800px;
+}
+
+.notification-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.notification-name {
+  font-family: "Oswald", cursive;
+  font-size: 3rem;
+  margin: 0;
+  color: black;
+}
+
+.notification-note {
+  font-size: 0.9rem;
+  color: #333;
+  margin: 0;
+}
+
+.notification-render {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.notification-unread,
+.notification-read {
+  width: 100%;
+}
+
+.notification-heading {
+  font-family: "Oswald", cursive;
+  font-size: 1.5rem;
+  margin-top: 0rem;
+  margin-bottom: 0;
+  color: #333;
+}
+
+.notification-list {
+  list-style-type: none;
+  padding: 0rem 1rem;
+  margin: 0;
+}
+
+.notification-item {
+  color: #333;
+}
+
+.notification-button {
+  background-color: transparent;
+  color: black;
+  border: 1px solid #333;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-family: "Oswald", cursive;
+  font-size: 1rem;
+}
+
+.notification-button:hover {
+  background-color: #0084ff;
+  color: white;
+}

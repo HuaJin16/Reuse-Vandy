@@ -56,7 +56,11 @@ export default function MessagesList() {
                   <span>
                     {conv.recipient.firstName} {conv.recipient.lastName}
                   </span>
-                  <p>{conv.lastMessage.message}</p>
+                  <p>
+                    {conv.lastMessage.senderId === conv.recipient._id
+                      ? conv.lastMessage.message
+                      : `You: ${conv.lastMessage.message}`}
+                  </p>
                   <p>{formatDate(conv.lastMessage.updatedAt)}</p>
                 </Link>
               </li>

@@ -94,7 +94,7 @@ const getMessagesList = async (req, res) => {
       return {
         conversationId: conv._id,
         recipient: otherUser,
-        lastMessage: conv.messages[conv.messages.length - 1],
+        lastMessage: conv.messages[0],
       };
     });
 

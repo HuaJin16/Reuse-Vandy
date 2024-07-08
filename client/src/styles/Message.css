@@ -1,0 +1,129 @@
+.message-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 800px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.receiver-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  margin-top: 10px;
+}
+
+.receiver-content {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.receiver-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+  border: 2px solid #fff;
+}
+
+.receiver-name {
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+.message-container {
+  display: flex;
+  flex-direction: column-reverse;
+  overflow-y: auto;
+  flex-grow: 1;
+  padding: 10px 16px 10px 10px;
+  margin-bottom: 20px;
+  background-image: url("../images/vandy_logo.png");
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.message-container::-webkit-scrollbar {
+  width: 0px; /* For Chrome and Safari*/
+}
+
+.message-container:hover {
+  scrollbar-width: thin; /* For Firefox */
+  -ms-overflow-style: auto; /* For Internet Explorer and Edge */
+}
+
+.message-container:hover::-webkit-scrollbar {
+  width: 6px;
+}
+
+.message-container:hover::-webkit-scrollbar-thumb {
+  background-color: #000000;
+  opacity: 0.2;
+  border-radius: 3px;
+}
+
+.message-container:hover::-webkit-scrollbar-track {
+  background-color: #000000;
+  opacity: 0.2;
+}
+
+.message {
+  max-width: 80%;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 10px;
+  word-wrap: break-word;
+}
+
+.sent {
+  align-self: flex-end;
+  background-color: #0084ff;
+  color: white;
+}
+
+.received {
+  align-self: flex-start;
+  background-color: #f1f0f0;
+  color: black;
+}
+
+.message-form {
+  display: flex;
+  margin-top: auto;
+  position: relative;
+  width: 100%;
+}
+
+.message-input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+}
+
+.send-button {
+  position: absolute;
+  right: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 20px;
+  background-color: transparent;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fad25a;
+}
+
+.send-button svg {
+  width: 22px;
+  height: 22px;
+}

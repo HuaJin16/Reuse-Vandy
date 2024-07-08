@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import "../styles/CategoryButtons.css";
 
 export default function CategoryButtons() {
   const navigate = useNavigate();
@@ -22,9 +23,13 @@ export default function CategoryButtons() {
   };
 
   return (
-    <div>
+    <div className="categories-container">
       {categories.map((category) => (
-        <button onClick={() => handleCategoryClick(category)} key={category}>
+        <button
+          onClick={() => handleCategoryClick(category)}
+          key={category}
+          className="category-button"
+        >
           {category}
         </button>
       ))}

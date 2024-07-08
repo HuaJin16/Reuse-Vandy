@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { IoMdSend } from "react-icons/io";
 import { io } from "socket.io-client";
+import "../styles/Message.css";
 
 export default function Message() {
   const [messages, setMessages] = useState([]);
@@ -10,6 +12,7 @@ export default function Message() {
   const [receiver, setReceiver] = useState(null);
   const [socket, setSocket] = useState(null);
   const { recipientId } = useParams();
+  const { currentUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     const getMessages = async () => {
@@ -86,31 +89,41 @@ export default function Message() {
   };
 
   return (
-    <div>
+    <div className="message-page">
       {errors.general && <span>Error: {errors.general}</span>}
       {receiver && (
-        <div>
-          <img src={receiver.avatar} />
-          <span>
-            {receiver.firstName} {receiver.lastName}
-          </span>
+        <div className="receiver-info">
+          <img src={receiver.avatar} className="receiver-avatar" />
+          <div className="receiver-content">
+            <span className="receiver-name">
+              {receiver.firstName} {receiver.lastName}
+            </span>
+          </div>
         </div>
       )}
-      <div>
+      <div className="message-container">
         {errors.messages
           ? errors.messages
           : messages.map((msg, index) => (
-              <div key={`${msg._id}-${index}`}>{msg.message}</div>
+              <div
+                key={`${msg._id}-${index}`}
+                className={`message ${
+                  msg.senderId === currentUser._id ? "sent" : "received"
+                }`}
+              >
+                {msg.message}
+              </div>
             ))}
       </div>
-      <form onSubmit={sendMessage}>
+      <form onSubmit={sendMessage} className="message-form">
         <input
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder="Send a message"
+          className="message-input"
         />
-        <button type="submit" title="Send">
+        <button type="submit" title="Send" className="send-button">
           <IoMdSend />
         </button>
       </form>

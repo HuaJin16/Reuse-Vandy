@@ -22,27 +22,29 @@ function App() {
   const hideHeaderRoutes = ["/access", "/login", "/register"];
 
   return (
-    <>
-      {!hideHeaderRoutes.includes(location.pathname) && <Header />}
-      {!hideHeaderRoutes.includes(location.pathname) && <CategoryButtons />}
-      <Routes>
-        <Route element={<PrivateRoute />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/new" element={<NewPost />} />
-          <Route path="/edit/:postId" element={<EditPost />} />
-          <Route path="/saved" element={<SavedPosts />} />
-          <Route path="/notifications" element={<Notifications />} />
-          <Route path="/message/:recipientId" element={<Message />} />
-          <Route path="/messages" element={<MessagesList />} />
-        </Route>
-        <Route path="/access" element={<Access />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/post/:postId" element={<Post />} />
-        <Route path="/search" element={<Search />} />
-      </Routes>
-    </>
+    <div className="app-container">
+      <div className="page-content">
+        {!hideHeaderRoutes.includes(location.pathname) && <Header />}
+        {!hideHeaderRoutes.includes(location.pathname) && <CategoryButtons />}
+        <Routes>
+          <Route element={<PrivateRoute />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/new" element={<NewPost />} />
+            <Route path="/edit/:postId" element={<EditPost />} />
+            <Route path="/saved" element={<SavedPosts />} />
+            <Route path="/notifications" element={<Notifications />} />
+            <Route path="/message/:recipientId" element={<Message />} />
+            <Route path="/messages" element={<MessagesList />} />
+          </Route>
+          <Route path="/access" element={<Access />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/post/:postId" element={<Post />} />
+          <Route path="/search" element={<Search />} />
+        </Routes>
+      </div>
+    </div>
   );
 }
 

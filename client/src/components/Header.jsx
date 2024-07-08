@@ -4,6 +4,7 @@ import { IoSearch } from "react-icons/io5";
 import { MdOutlineBookmarkAdd, MdOutlineNotifications } from "react-icons/md";
 import { FiMessageSquare } from "react-icons/fi";
 import { useSelector } from "react-redux";
+import "../styles/Header.css";
 
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
@@ -29,53 +30,56 @@ export default function Header() {
   }, [window.location.search]);
 
   return (
-    <header>
-      <div>
+    <header className="header">
+      <div className="logo-container">
         {currentUser ? (
           <Link to="/">
-            <span>Reuse, Vandy!</span>
+            <span className="logo-text">Reuse, Vandy!</span>
           </Link>
         ) : (
           <Link to="/access">
-            <span>Reuse, Vandy!</span>
+            <span className="logo-text">Reuse, Vandy!</span>
           </Link>
         )}
       </div>
-      <div>
-        <form onSubmit={handleSubmit}>
+      <div className="search-container">
+        <form onSubmit={handleSubmit} className="search-form">
           <input
             type="text"
             name="search"
             placeholder="Search items on Reuse..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
           />
-          <button>
+          <button className="search-button">
             <IoSearch />
           </button>
         </form>
       </div>
-      <nav>
-        <ul>
+      <nav className="nav-container">
+        <ul className="nav-list">
           <Link to="/saved">
-            <li>
+            <li className="nav-item">
               <MdOutlineBookmarkAdd title="Saved" />
             </li>
           </Link>
           <Link to="/notifications">
-            <li>
+            <li className="nav-item">
               <MdOutlineNotifications title="Notifiations" />
             </li>
           </Link>
           <Link to="messages">
-            <li>
+            <li className="nav-item">
               <FiMessageSquare title="Messages" />
             </li>
           </Link>
           <Link to="profile">
-            <li>
-              <img src={currentUser.avatar} />
-              <span>Hello, {currentUser.firstName}</span>
+            <li className="nav-item profile-link">
+              <img src={currentUser.avatar} className="profile-avatar" />
+              <span className="profile-name">
+                Hello, {currentUser.firstName}
+              </span>
             </li>
           </Link>
         </ul>

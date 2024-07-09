@@ -63,6 +63,11 @@
   color: #333;
 }
 
+.notification-none {
+  align-self: center;
+  margin-bottom: 0.5rem;
+}
+
 .notification-button {
   background-color: transparent;
   color: black;

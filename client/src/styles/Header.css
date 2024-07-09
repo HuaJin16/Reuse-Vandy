@@ -78,6 +78,21 @@
   color: #0084ff;
 }
 
+.notification-icons {
+  position: relative;
+}
+
+.notification-icons span {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background-color: #ff4b4b;
+  color: white;
+  font-size: 0.7rem;
+  padding: 0px 6px;
+  border-radius: 50%;
+}
+
 .profile-link {
   display: flex;
   align-items: center;
@@ -108,5 +123,10 @@
 
   .nav-item {
     margin: 0.5rem;
+  }
+
+  .notification-icons span {
+    top: 0px;
+    right: 0px;
   }
 }

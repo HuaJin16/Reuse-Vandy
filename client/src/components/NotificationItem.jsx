@@ -51,12 +51,14 @@ export default function NotificationItem({
       <div className="notification-content">
         <div className="notification-render">{renderNotificationContent()}</div>
         <div className="notification-buttons">
-          <button
-            onClick={() => onMarkAsRead(notification._id)}
-            className="notification-read"
-          >
-            <MdOutlineBookmarkAdded title="Mark as Read" />
-          </button>
+          {!notification.read && (
+            <button
+              onClick={() => onMarkAsRead(notification._id)}
+              className="notification-read"
+            >
+              <MdOutlineBookmarkAdded title="Mark as Read" />
+            </button>
+          )}
           <button
             onClick={() => onDelete(notification._id)}
             className="notification-delete"

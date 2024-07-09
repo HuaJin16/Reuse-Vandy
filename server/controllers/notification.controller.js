@@ -27,6 +27,10 @@ const updateNotificationAsRead = async (req, res) => {
       { read: true },
       { new: true }
     );
+
+    // emit the notification as read to all connected clients
+    req.app.get("io").emit("notification_read", req.params.notificationId);
+
     res.status(200).json(updatedReadStatus);
   } catch (err) {
     const notificationErrors = handleErrors(err);
@@ -41,6 +45,10 @@ const deleteNotification = async (req, res) => {
     if (!notification) throw Error("No notifications found");
 
     await Notification.findByIdAndDelete(req.params.notificationId);
+
+    // emit the notification as deleted to all connected clients
+    req.app.get("io").emit("notification_deleted", req.params.notificationId);
+
     res.status(200).json("Notification deleted");
   } catch (err) {
     const notificationErrors = handleErrors(err);

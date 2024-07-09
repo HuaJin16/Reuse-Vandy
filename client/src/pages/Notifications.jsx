@@ -24,7 +24,7 @@ export default function Notification() {
         if (data.notificationErrors) {
           setErrors(data.notificationErrors);
         } else {
-          const unreadNotifiations = data.filter(
+          const unreadNotifications = data.filter(
             (notif) => processNotifications(notif) && !notif.read
           );
 
@@ -32,7 +32,7 @@ export default function Notification() {
             (notif) => processNotifications(notif) && notif.read
           );
 
-          setUnreadNotifications(unreadNotifiations);
+          setUnreadNotifications(unreadNotifications);
           setReadNotifications(readNotifications);
         }
       } catch (err) {
@@ -145,7 +145,9 @@ export default function Notification() {
               </ul>
             </div>
           ) : (
-            "No unread notifications"
+            <div className="notification-none">
+              <span>No unread notifications</span>
+            </div>
           )}
           {showReadNotifications && readNotifications.length > 0 ? (
             <div className="notification-read">
@@ -164,7 +166,9 @@ export default function Notification() {
               </ul>
             </div>
           ) : showReadNotifications ? (
-            "No read notifications"
+            <div className="notification-none">
+              <span>No read notifications</span>
+            </div>
           ) : (
             ""
           )}

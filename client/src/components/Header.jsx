@@ -4,11 +4,13 @@ import { IoSearch } from "react-icons/io5";
 import { MdOutlineBookmarkAdd, MdOutlineNotifications } from "react-icons/md";
 import { FiMessageSquare } from "react-icons/fi";
 import { useSelector } from "react-redux";
+import { io } from "socket.io-client";
 import "../styles/Header.css";
 
 export default function Header() {
   const { currentUser } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState("");
+  const [unreadNotifCount, setUnreadNotifCount] = useState(0);
   const navigate = useNavigate();
 
   // function to update URL with search term and navigate to search results page
@@ -28,6 +30,49 @@ export default function Header() {
       setSearchTerm(searchTermUrl);
     }
   }, [window.location.search]);
+
+  // update the number of unread notifications on component mount
+  useEffect(() => {
+    const getUnreadNotifCount = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:8000/notification/get/${currentUser._id}`,
+          { credentials: "include" }
+        );
+        const data = await res.json();
+        if (!data.notificationErrors) {
+          const unreadNotifications = data.filter((notif) => !notif.read);
+          setUnreadNotifCount(unreadNotifications.length);
+        }
+
+        // establish WebSocket connection
+        const newSocket = io("http://localhost:8000");
+
+        // listen for new notifications
+        newSocket.on("new_notification", (notification) => {
+          if (notification.recipientId === currentUser._id) {
+            setUnreadNotifCount((prevCount) => prevCount + 1);
+          }
+        });
+
+        // listen for read notifications
+        newSocket.on("notification_read", (notificationId) => {
+          setUnreadNotifCount((prevCount) => Math.max(0, prevCount - 1));
+        });
+
+        // listen for deleted, unread notifications
+        newSocket.on("notification_deleted", (notificationId) => {
+          setUnreadNotifCount((prevCount) => Math.max(0, prevCount - 1));
+        });
+
+        // WebSocket cleanup
+        return () => newSocket.close();
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getUnreadNotifCount();
+  }, []);
 
   return (
     <header className="header">
@@ -64,10 +109,11 @@ export default function Header() {
               <MdOutlineBookmarkAdd title="Saved" />
             </li>
           </Link>
-          <Link to="/notifications">
+          <Link to="/notifications" className="notification-icons">
             <li className="nav-item">
               <MdOutlineNotifications title="Notifiations" />
             </li>
+            <span>{unreadNotifCount}</span>
           </Link>
           <Link to="messages">
             <li className="nav-item">

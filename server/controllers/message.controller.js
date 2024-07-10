@@ -56,7 +56,7 @@ const sendMessage = async (req, res) => {
     req.app.get("io").emit("new_message", newMessages);
 
     // emit the notification to all connected clients
-    req.app.get("io").emit("new_notification", notification);
+    req.app.get("io").emit("new_notification");
 
     res.status(201).json(newMessages);
   } catch (err) {

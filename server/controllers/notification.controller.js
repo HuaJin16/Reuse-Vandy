@@ -29,7 +29,7 @@ const updateNotificationAsRead = async (req, res) => {
     );
 
     // emit the notification as read to all connected clients
-    req.app.get("io").emit("notification_read", req.params.notificationId);
+    req.app.get("io").emit("notification_read");
 
     res.status(200).json(updatedReadStatus);
   } catch (err) {
@@ -47,7 +47,7 @@ const deleteNotification = async (req, res) => {
     await Notification.findByIdAndDelete(req.params.notificationId);
 
     // emit the notification as deleted to all connected clients
-    req.app.get("io").emit("notification_deleted", req.params.notificationId);
+    req.app.get("io").emit("notification_deleted");
 
     res.status(200).json("Notification deleted");
   } catch (err) {

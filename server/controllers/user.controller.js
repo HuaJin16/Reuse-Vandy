@@ -101,12 +101,16 @@ const saveUnsavePost = async (req, res) => {
           (id) => id.toString() !== postId
         );
         await savedPostDoc.save();
+        // emit socket event for unsaved post
+        req.app.get("io").emit("post_unsave");
         return res.status(200).json({ message: "Post unsaved successfully " });
       }
       // if the post is not saved, add the postId to the savedPosts array
       else {
         savedPostDoc.savedPosts.push(postId);
         await savedPostDoc.save();
+        // emit socket event for saved post
+        req.app.get("io").emit("post_save");
         return res.status(200).json({ message: "Post saved successfully" });
       }
     }
@@ -117,6 +121,8 @@ const saveUnsavePost = async (req, res) => {
         savedPosts: [postId],
       });
       await newSavedPost.save();
+      // emit socket event for saved post
+      req.app.get("io").emit("post_save");
       return res.status(200).json({ message: "Post saved sucessfully" });
     }
   } catch (err) {

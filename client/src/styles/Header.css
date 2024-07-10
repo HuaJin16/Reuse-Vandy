@@ -78,6 +78,21 @@
   color: #0084ff;
 }
 
+.saved-icons {
+  position: relative;
+}
+
+.saved-icons span {
+  position: absolute;
+  top: -8px;
+  right: -13px;
+  background-color: #0084ff;
+  color: white;
+  font-size: 0.7rem;
+  padding: 0px 6px;
+  border-radius: 50%;
+}
+
 .notification-icons {
   position: relative;
 }
@@ -128,5 +143,10 @@
   .notification-icons span {
     top: 0px;
     right: 0px;
+  }
+
+  .saved-icons span {
+    top: 0px;
+    right: -5px;
   }
 }

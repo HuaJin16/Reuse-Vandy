@@ -58,7 +58,7 @@ const deletePost = async (req, res) => {
       await notification.save();
 
       // emit the notification to all connected clients
-      req.app.get("io").emit("new_notification", notification);
+      req.app.get("io").emit("new_notification");
     }
 
     await Post.findByIdAndDelete(req.params.id);

@@ -8,9 +8,10 @@ import { io } from "socket.io-client";
 import "../styles/Header.css";
 
 export default function Header() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, savedPosts } = useSelector((state) => state.user);
   const [searchTerm, setSearchTerm] = useState("");
   const [unreadNotifCount, setUnreadNotifCount] = useState(0);
+  const [savedPostCount, setSavedPostCount] = useState(0);
   const navigate = useNavigate();
 
   // function to update URL with search term and navigate to search results page
@@ -31,10 +32,11 @@ export default function Header() {
     }
   }, [window.location.search]);
 
-  // update the number of unread notifications on component mount
+  // update the number of unread notifications and saved posts
   useEffect(() => {
-    const getUnreadNotifCount = async () => {
+    const getInitialData = async () => {
       try {
+        // fetch initial unread notifications count
         const res = await fetch(
           `http://localhost:8000/notification/get/${currentUser._id}`,
           { credentials: "include" }
@@ -45,24 +47,35 @@ export default function Header() {
           setUnreadNotifCount(unreadNotifications.length);
         }
 
+        // retrieve intial saved posts count
+        setSavedPostCount(savedPosts.length);
+
         // establish WebSocket connection
         const newSocket = io("http://localhost:8000");
 
         // listen for new notifications
-        newSocket.on("new_notification", (notification) => {
-          if (notification.recipientId === currentUser._id) {
-            setUnreadNotifCount((prevCount) => prevCount + 1);
-          }
+        newSocket.on("new_notification", () => {
+          setUnreadNotifCount((prevCount) => prevCount + 1);
         });
 
         // listen for read notifications
-        newSocket.on("notification_read", (notificationId) => {
+        newSocket.on("notification_read", () => {
           setUnreadNotifCount((prevCount) => Math.max(0, prevCount - 1));
         });
 
         // listen for deleted, unread notifications
-        newSocket.on("notification_deleted", (notificationId) => {
+        newSocket.on("notification_deleted", () => {
           setUnreadNotifCount((prevCount) => Math.max(0, prevCount - 1));
+        });
+
+        // listen for newly saved posts
+        newSocket.on("post_save", () => {
+          setSavedPostCount((prevCount) => prevCount + 1);
+        });
+
+        // listen for newly unsaved posts
+        newSocket.on("post_unsave", () => {
+          setSavedPostCount((prevCount) => Math.max(0, prevCount - 1));
         });
 
         // WebSocket cleanup
@@ -71,7 +84,7 @@ export default function Header() {
         console.log(err);
       }
     };
-    getUnreadNotifCount();
+    getInitialData();
   }, []);
 
   return (
@@ -104,10 +117,11 @@ export default function Header() {
       </div>
       <nav className="nav-container">
         <ul className="nav-list">
-          <Link to="/saved">
+          <Link to="/saved" className="saved-icons">
             <li className="nav-item">
               <MdOutlineBookmarkAdd title="Saved" />
             </li>
+            <span>{savedPostCount}</span>
           </Link>
           <Link to="/notifications" className="notification-icons">
             <li className="nav-item">

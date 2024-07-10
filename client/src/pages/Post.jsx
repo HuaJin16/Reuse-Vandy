@@ -7,12 +7,18 @@ import "swiper/css/bundle";
 import { IoStorefrontOutline } from "react-icons/io5";
 import { BiMessageDetail } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import PostItem from "../components/PostItem";
 
 export default function Post() {
   const [errors, setErrors] = useState({});
   const [post, setPost] = useState(null);
   const params = useParams();
   SwiperCore.use([Navigation]);
+  const { savedPosts } = useSelector((state) => state.user);
+  const isPostSaved = savedPosts.some(
+    (savedPost) => savedPost._id === params.postId
+  );
 
   // fetches and sets post data on mount or when postId changes
   useEffect(() => {
@@ -74,8 +80,7 @@ export default function Post() {
             ))}
           </Swiper>
           <div>
-            <p>{post.title}</p>
-            <p>${post.price}</p>
+            <PostItem post={post} isSaved={isPostSaved} showImage={false} />
             {getTrueCheckboxes().map((key) => (
               <p key={key}>{getDisplayText(key)}</p>
             ))}

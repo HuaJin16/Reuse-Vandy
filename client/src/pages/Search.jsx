@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PostItem from "../components/PostItem";
 import { GrFormPreviousLink, GrFormNextLink } from "react-icons/gr";
 import CheckboxInput from "../components/CheckboxInput";
+import { useSelector } from "react-redux";
 
 export default function () {
   const [sidebarData, setSidebarData] = useState({
@@ -16,6 +17,7 @@ export default function () {
   const [postRange, setPostRange] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
+  const { savedPosts } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const tags = ["new", "lightlyUsed", "used", "obo", "free"];
@@ -200,7 +202,14 @@ export default function () {
         <div>
           {posts.length === 0 && <p>No posts found</p>}{" "}
           {posts.map((post) => (
-            <PostItem key={post._id} post={post} />
+            <PostItem
+              key={post._id}
+              post={post}
+              isSaved={savedPosts.some(
+                (savedPost) => savedPost._id === post._id
+              )}
+              showImage={true}
+            />
           ))}
         </div>
         <div>

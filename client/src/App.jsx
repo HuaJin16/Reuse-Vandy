@@ -20,12 +20,13 @@ import MessagesList from "./pages/MessagesList";
 function App() {
   const location = useLocation();
   const hideHeaderRoutes = ["/access", "/login", "/register"];
+  const isSearchPage = location.pathname === "/search";
 
   return (
     <div className="app-container">
-      <div className="page-content">
-        {!hideHeaderRoutes.includes(location.pathname) && <Header />}
-        {!hideHeaderRoutes.includes(location.pathname) && <CategoryButtons />}
+      {!hideHeaderRoutes.includes(location.pathname) && <Header />}
+      {!hideHeaderRoutes.includes(location.pathname) && <CategoryButtons />}
+      <div className={`page-content ${isSearchPage ? "search-page" : ""}`}>
         <Routes>
           <Route element={<PrivateRoute />}>
             <Route path="/" element={<Home />} />

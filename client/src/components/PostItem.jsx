@@ -3,13 +3,11 @@ import { MdOutlineBookmarkAdd } from "react-icons/md";
 import { MdOutlineBookmarkRemove } from "react-icons/md";
 import { useSelector, useDispatch } from "react-redux";
 import { addSavedPost, removeSavedPost } from "../redux/user/userSlice";
+import "../styles/PostItem.css";
 
 export default function PostItem({ post, isSaved, showImage }) {
-  const { currentUser, savedPosts } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const isPostSaved = savedPosts.some(
-    (savedPost) => savedPost._id === post._id
-  );
 
   // function to save or unsave a post for the current user
   const handleSaveUnsavePost = async () => {
@@ -28,7 +26,7 @@ export default function PostItem({ post, isSaved, showImage }) {
       if (data.postErrors) {
         console.log("Error saving/unsaving post", data.postErrors);
       } else {
-        if (isPostSaved) {
+        if (isSaved) {
           dispatch(removeSavedPost(post._id));
         } else {
           dispatch(addSavedPost(post));
@@ -40,22 +38,27 @@ export default function PostItem({ post, isSaved, showImage }) {
   };
 
   return (
-    <div>
-      <Link to={`/post/${post._id}`}>
-        {showImage && <img src={post.imageUrls[0]} alt="Post Image" />}
-        <div>
-          <p>{post.title}</p>
-          <p>{post.price}</p>
+    <div className="post-item-container">
+      <Link to={`/post/${post._id}`} className="post-link">
+        {showImage && (
+          <img
+            src={post.imageUrls[0]}
+            alt="Post Image"
+            className="post-image"
+          />
+        )}
+        <div className="post-details">
+          <p className="post-title">{post.title}</p>
+          <p className="post-price">${post.price}</p>
         </div>
       </Link>
-      {isSaved ? (
-        <MdOutlineBookmarkRemove
-          title="Unsave"
-          onClick={handleSaveUnsavePost}
-        />
-      ) : (
-        <MdOutlineBookmarkAdd title="Save" onClick={handleSaveUnsavePost} />
-      )}
+      <button
+        className="save-button"
+        onClick={handleSaveUnsavePost}
+        title={isSaved ? "Unsave" : "Save"}
+      >
+        {isSaved ? <MdOutlineBookmarkRemove /> : <MdOutlineBookmarkAdd />}
+      </button>
     </div>
   );
 }

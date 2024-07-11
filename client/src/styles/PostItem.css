@@ -1,0 +1,69 @@
+.post-item-container {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+  transition: transform 0.2s ease-in-out;
+  width: 240px;
+  height: 280px;
+  position: relative;
+  overflow: hidden;
+  margin: 8px;
+}
+
+.post-item-container:hover {
+  transform: translateY(-5px);
+}
+
+.post-link {
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+  height: 100%;
+}
+
+.post-image {
+  width: 100%;
+  height: 85%;
+  object-fit: cover;
+}
+
+.post-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: 15%;
+  padding-left: 0.4rem;
+}
+
+.post-title {
+  font-size: 0.9rem;
+  margin: 0;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.post-price {
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+.save-button {
+  position: absolute;
+  bottom: 0.2rem;
+  right: 0.5rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 20px;
+  padding: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+  background-color: #0084ff;
+}

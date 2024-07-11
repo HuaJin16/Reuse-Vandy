@@ -104,7 +104,7 @@ const getPost = async (req, res) => {
 // retrieves a list of posts based on query parameters
 const getPosts = async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit) || 2;
+    const limit = parseInt(req.query.limit) || 24;
     const page = parseInt(req.query.page) || 1;
     const startIndex = (page - 1) * limit;
     const searchTerm = req.query.searchTerm || "";

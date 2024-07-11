@@ -4,6 +4,7 @@ import PostItem from "../components/PostItem";
 import { GrFormPreviousLink, GrFormNextLink } from "react-icons/gr";
 import CheckboxInput from "../components/CheckboxInput";
 import { useSelector } from "react-redux";
+import "../styles/Search.css";
 
 export default function () {
   const [sidebarData, setSidebarData] = useState({
@@ -17,7 +18,7 @@ export default function () {
   const [postRange, setPostRange] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const { savedPosts } = useSelector((state) => state.user);
+  const { currentUser, savedPosts } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const tags = ["new", "lightlyUsed", "used", "obo", "free"];
@@ -112,7 +113,13 @@ export default function () {
         `http://localhost:8000/post/get?${searchQuery}&page=${currentPage}`
       );
       const data = await res.json();
-      setPosts(data.posts);
+
+      // filter out the current user's posts
+      const filteredPosts = data.posts.filter(
+        (post) => post.userRef !== currentUser._id
+      );
+
+      setPosts(filteredPosts);
       setPostRange(data.postRange);
       setTotalPages(data.totalPages);
     };
@@ -134,101 +141,111 @@ export default function () {
   };
 
   return (
-    <div>
-      <div>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <p>{postRange}</p>
-          </div>
-          <div>
-            <label>Search Term:</label>
-            <input
-              type="text"
-              name="search"
-              placeholder="Search..."
-              value={sidebarData.searchTerm}
-              onChange={handleChange}
-            />
-          </div>
-          <div>
-            <label>Category:</label>
-            <select
-              name="category"
-              onChange={handleChange}
-              value={sidebarData.category}
-            >
-              <option value="">All Categories</option>
-              <option value="tickets">Tickets</option>
-              <option value="clothes">Clothes</option>
-              <option value="merch">Merch</option>
-              <option value="electronics">Electronics</option>
-              <option value="furniture">Furniture</option>
-              <option value="housing">Housing</option>
-              <option value="books">Books</option>
-              <option value="miscellaneous">Miscellaneous</option>
-            </select>
-          </div>
-          <div>
-            <label>Tags:</label>
-            {tags.map((key) => (
-              <CheckboxInput
-                key={key}
-                label={getDisplayText(key)}
-                name="tags"
-                value={key}
+    <div className="search-page-container">
+      <h1 className="content-title">Post Results</h1>
+      <div className="search">
+        <div className="sidebar">
+          <form onSubmit={handleSubmit} className="search-post-form">
+            <div className="post-range">
+              <p>{postRange}</p>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Search Term: </label>
+              <input
+                type="text"
+                name="search"
+                placeholder="Search..."
+                value={sidebarData.searchTerm}
                 onChange={handleChange}
-                checked={sidebarData.tags.includes(key)}
+                className="form-input"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Category: </label>
+              <select
+                name="category"
+                onChange={handleChange}
+                value={sidebarData.category}
+                className="form-select"
+              >
+                <option value="">All Categories</option>
+                <option value="tickets">Tickets</option>
+                <option value="clothes">Clothes</option>
+                <option value="merch">Merch</option>
+                <option value="electronics">Electronics</option>
+                <option value="furniture">Furniture</option>
+                <option value="housing">Housing</option>
+                <option value="books">Books</option>
+                <option value="miscellaneous">Miscellaneous</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Tags:</label>
+              {tags.map((key) => (
+                <CheckboxInput
+                  key={key}
+                  label={getDisplayText(key)}
+                  name="tags"
+                  value={key}
+                  onChange={handleChange}
+                  checked={sidebarData.tags.includes(key)}
+                />
+              ))}
+            </div>
+            <div className="form-group">
+              <label className="form-label">Sort: </label>
+              <select
+                name="sortOrder"
+                onChange={handleChange}
+                defaultValue={"createdAt_desc"}
+                className="form-select"
+              >
+                <option value="price_desc">Price: Low to High</option>
+                <option value="price_asc">Price: High to Low</option>
+                <option value="createdAt_desc">Newest Posts</option>
+                <option value="createdAt_asc">Oldest Posts</option>
+              </select>
+            </div>
+            <button className="search-post-button">Search</button>
+          </form>
+        </div>
+        <div className="main-content">
+          <div className="post-list">
+            {posts.length === 0 && <p className="post-none">No posts found</p>}{" "}
+            {posts.map((post) => (
+              <PostItem
+                key={post._id}
+                post={post}
+                isSaved={savedPosts.some(
+                  (savedPost) => savedPost._id === post._id
+                )}
+                showImage={true}
               />
             ))}
           </div>
-          <div>
-            <label>Sort:</label>
-            <select
-              name="sortOrder"
-              onChange={handleChange}
-              defaultValue={"createdAt_desc"}
-            >
-              <option value="price_desc">Price: Low to High</option>
-              <option value="price_asc">Price: High to Low</option>
-              <option value="createdAt_desc">Newest Posts</option>
-              <option value="createdAt_asc">Oldest Posts</option>
-            </select>
+          <div className="pagination">
+            {posts.length !== 0 && (
+              <div>
+                <button
+                  onClick={handlePrevPage}
+                  disabled={currentPage === 1}
+                  className="pagination-button"
+                >
+                  <GrFormPreviousLink /> Previous
+                </button>
+                <span className="page-info">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button
+                  onClick={handleNextPage}
+                  disabled={currentPage === totalPages}
+                  className="pagination-button"
+                >
+                  Next <GrFormNextLink />
+                </button>
+              </div>
+            )}
           </div>
-          <button>Search</button>
-        </form>
-      </div>
-      <div>
-        <h1>Post Results</h1>
-        <div>
-          {posts.length === 0 && <p>No posts found</p>}{" "}
-          {posts.map((post) => (
-            <PostItem
-              key={post._id}
-              post={post}
-              isSaved={savedPosts.some(
-                (savedPost) => savedPost._id === post._id
-              )}
-              showImage={true}
-            />
-          ))}
-        </div>
-        <div>
-          {posts.length !== 0 && (
-            <div>
-              <button onClick={handlePrevPage} disabled={currentPage === 1}>
-                <GrFormPreviousLink /> Previous
-              </button>
-              <span>
-                Page {currentPage} of {totalPages}
-              </span>
-              <button
-                onClick={handleNextPage}
-                disabled={currentPage === totalPages}
-              >
-                Next <GrFormNextLink />
-              </button>
-            </div>
-          )}
         </div>
       </div>
     </div>

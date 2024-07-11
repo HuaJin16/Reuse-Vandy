@@ -1,0 +1,166 @@
+.search-page-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  width: 95%;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+}
+
+.content-title {
+  font-family: "Oswald", cursive;
+  font-size: 3rem;
+  margin: 1rem 0;
+  color: black;
+}
+
+.search {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 20px;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #b9b9b9;
+  border-radius: 20px;
+  width: 25%;
+  min-width: 200px;
+  max-width: 300px;
+  margin: 1rem;
+  height: fit-content;
+}
+
+.search-post-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+  max-width: 200px;
+}
+
+.post-range {
+  font-weight: bold;
+  width: 100%;
+}
+
+.form-group {
+  width: 100%;
+}
+
+.form-label {
+  display: block;
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-post-button {
+  width: 100%;
+  padding: 10px;
+  background-color: transparent;
+  color: #333;
+  border: 1px solid #b9b9b9;
+  border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s;
+  margin-bottom: 1rem;
+}
+
+.search-post-button:hover {
+  background-color: #0084ff;
+  color: white;
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.post-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-left: 0.7rem;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.pagination-button {
+  background-color: transparent;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px 12px;
+  transition: background-color 0.3s, color 0.3s;
+  margin-bottom: 1rem;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background-color: #0084ff;
+  color: white;
+}
+
+.pagination-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-size: 1rem;
+  margin: 0.5rem;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .search-page-container {
+    width: 100%;
+    border: none;
+    border-radius: 0;
+  }
+
+  .search {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    max-width: none;
+    margin: 0 0 1rem 0;
+  }
+
+  .search-post-form {
+    width: 100%;
+  }
+
+  .post-list {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+  }
+
+  .page-info {
+    width: 100%;
+    text-align: center;
+  }
+}

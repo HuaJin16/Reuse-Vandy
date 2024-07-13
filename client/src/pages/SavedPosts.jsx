@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import PostItem from "../components/PostItem";
 import { addSavedPost, clearSavedPosts } from "../redux/user/userSlice";
+import "../styles/SavedPosts.css";
 
 export default function SavedPost() {
   const [errors, setErrors] = useState({});
@@ -31,13 +32,13 @@ export default function SavedPost() {
   }, []);
 
   return (
-    <div>
-      <h2>Saved Posts</h2>
-      <div>
+    <div className="saved-container">
+      <h2 className="saved-title">Saved Posts</h2>
+      <div className="saved-content">
         {errors.general || errors.posts ? (
           <span>{errors.general || errors.posts}</span>
         ) : savedPosts.length === 0 ? (
-          <span>No saved posts found</span>
+          <span className="saved-none">No saved posts found</span>
         ) : (
           savedPosts.map((post) => (
             <PostItem

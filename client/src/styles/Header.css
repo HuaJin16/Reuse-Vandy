@@ -7,7 +7,7 @@
   border: 1px solid #ccc;
   border-radius: 20px;
   margin-bottom: 1rem;
-  width: 100%;
+  width: 70%;
   max-width: 1280px;
 }
 
@@ -35,6 +35,7 @@
 .search-form {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
 .search-input {

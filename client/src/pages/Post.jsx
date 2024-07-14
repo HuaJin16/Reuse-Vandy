@@ -7,6 +7,9 @@ import "swiper/css/bundle";
 import { IoStorefrontOutline } from "react-icons/io5";
 import { BiMessageDetail } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { addSavedPost, removeSavedPost } from "../redux/user/userSlice";
 import "../styles/Post.css";
 
 export default function Post() {
@@ -14,6 +17,12 @@ export default function Post() {
   const [post, setPost] = useState(null);
   const [postUser, setPostUser] = useState(null);
   const params = useParams();
+  const navigate = useNavigate();
+  const { currentUser, savedPosts } = useSelector((state) => state.user);
+  const isSaved = post
+    ? savedPosts.some((savedPost) => savedPost._id === post._id)
+    : false;
+  const dispatch = useDispatch();
   SwiperCore.use([Navigation]);
 
   // fetches and sets post data on mount or when postId changes
@@ -81,13 +90,52 @@ export default function Post() {
     return mapping[key];
   };
 
+  // function to update URL with clicked category and navigate to search results page
+  const handleCategoryClick = (category) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set("category", category.toLowerCase());
+    const searchQuery = urlParams.toString();
+    navigate(`/search?${searchQuery}`);
+  };
+
+  // function to save or unsave a post for the current user
+  const handleSaveUnsave = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:8000/user/saveUnsave/${currentUser._id}/${post._id}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await res.json();
+      if (data.postErrors) {
+        setErrors(data.postErrors);
+      } else {
+        if (isSaved) {
+          dispatch(removeSavedPost(post._id));
+        } else {
+          dispatch(addSavedPost(post));
+        }
+      }
+    } catch (err) {
+      setErrors({ general: err.message });
+    }
+  };
+
   return (
     <div className="post-container">
       {(errors.posts || errors.auth || errors.general) &&
         (errors.posts || errors.auth || errors.general)}
       {post && postUser && (
         <div className="single-post">
-          <div className="postUser-info">
+          <div
+            className="postUser-info"
+            onClick={() => navigate(`/user/${postUser._id}`)}
+          >
             <img
               src={postUser.avatar}
               alt="post-user"
@@ -116,18 +164,36 @@ export default function Post() {
             <p className="single-post-title">{post.title}</p>
             <p className="single-post-price">${post.price}</p>
             <div className="post-attributes">
-              {getTrueCheckboxes().map((key) => (
-                <span key={key} className="single-post-attribute">
-                  {getDisplayText(key)}
+              {getTrueCheckboxes().length > 0 ? (
+                getTrueCheckboxes().map((key) => (
+                  <span
+                    key={key}
+                    className="single-post-attribute"
+                    onClick={() => handleCategoryClick(getDisplayText(key))}
+                  >
+                    {getDisplayText(key)}
+                  </span>
+                ))
+              ) : (
+                <span className="single-post-none">
+                  No categories or tags selected
                 </span>
-              ))}
+              )}
             </div>
             <p className="single-post-description">{post.description}</p>
             <p className="single-post-date">
               Posted on {new Date(post.createdAt).toLocaleDateString()}
             </p>
-            <button>
-              <IoStorefrontOutline /> Reserve
+            <button onClick={() => handleSaveUnsave()}>
+              {isSaved ? (
+                <span>
+                  <IoStorefrontOutline /> Unsave
+                </span>
+              ) : (
+                <span>
+                  <IoStorefrontOutline /> Save
+                </span>
+              )}
             </button>
             <Link to={`/message/${post.userRef}`} className="single-post-link">
               <button>

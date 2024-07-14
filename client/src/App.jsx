@@ -16,6 +16,7 @@ import Notifications from "./pages/Notifications";
 import CategoryButtons from "./components/CategoryButtons";
 import Message from "./pages/Message";
 import MessagesList from "./pages/MessagesList";
+import UserProfile from "./pages/UserProfile";
 
 function App() {
   const location = useLocation();
@@ -37,6 +38,7 @@ function App() {
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/message/:recipientId" element={<Message />} />
             <Route path="/messages" element={<MessagesList />} />
+            <Route path="/user/:userId" element={<UserProfile />} />
           </Route>
           <Route path="/access" element={<Access />} />
           <Route path="/login" element={<Login />} />

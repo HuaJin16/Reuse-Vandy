@@ -71,8 +71,6 @@ const deleteUser = async (req, res) => {
 // retrieve all posts created by the specified user
 const getPosts = async (req, res) => {
   try {
-    if (req.user.id !== req.params.id) throw Error("unauthorized");
-
     const posts = await Post.find({ userRef: req.params.id });
     res.status(200).json(posts);
   } catch (err) {

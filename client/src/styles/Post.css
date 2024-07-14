@@ -21,6 +21,13 @@
   width: 100%;
 }
 
+.postUser-info:hover {
+  cursor: pointer;
+  background-color: #f0f0f0;
+  transform: translateY(-2px);
+  border-radius: 5px;
+}
+
 .postUser-avatar {
   width: 50px;
   height: 50px;
@@ -112,7 +119,18 @@
   font-size: 1rem;
 }
 
+.single-post-attribute:hover {
+  cursor: pointer;
+  background-color: #0084ff;
+  color: white;
+}
+
+.single-post-none {
+  color: rgb(232, 108, 108);
+}
+
 .single-post-description {
+  margin-top: 0.5rem;
   margin-bottom: 0;
   font-size: 1.1rem;
 }

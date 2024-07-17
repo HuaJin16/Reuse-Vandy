@@ -1,0 +1,66 @@
+.userProfile-container {
+  max-width: 1080px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.userProfile-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.userProfile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 0.5rem;
+}
+
+.userProfile-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.userProfile-name {
+  font-family: "Oswald", cursive;
+  font-size: 2rem;
+  margin: 0 0 0.2rem 0;
+}
+
+.userProfile-joined {
+  font-size: 1rem;
+}
+
+.userProfile-title {
+  color: black;
+  font-family: "Oswald", cursive;
+  font-size: 2.5rem;
+  padding: 0;
+  margin: 0;
+}
+
+.userProfile-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0.2rem;
+}
+
+.userProfile-none {
+  color: rgb(232, 108, 108);
+}
+
+@media (max-width: 768px) {
+  .userProfile-list {
+    justify-content: center;
+  }
+}

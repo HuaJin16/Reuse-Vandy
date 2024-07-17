@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import PostItem from "../components/PostItem";
+import "../styles/UserProfile.css";
 
 export default function UserProfile() {
   const { userId } = useParams();
@@ -48,19 +49,28 @@ export default function UserProfile() {
   }
 
   return (
-    <div>
+    <div className="userProfile-container">
       {profileUser && (
         <div>
-          <div>
-            <img src={profileUser.avatar} alt="profile avatar" />
-            <h1>
-              {profileUser.firstName} {profileUser.lastName}
-            </h1>
+          <div className="userProfile-header">
+            <img
+              src={profileUser.avatar}
+              alt="profile avatar"
+              className="userProfile-avatar"
+            />
+            <div className="userProfile-details">
+              <h1 className="userProfile-name">
+                {profileUser.firstName} {profileUser.lastName}
+              </h1>
+              <span className="userProfile-joined">
+                Joined on {new Date(profileUser.createdAt).toLocaleDateString()}
+              </span>
+            </div>
           </div>
-          <h2>Posts</h2>
-          <div>
+          <h2 className="userProfile-title">Posts</h2>
+          <div className="userProfile-list">
             {posts.length === 0 ? (
-              <p>No posts found</p>
+              <p className="userProfile-none">No posts found</p>
             ) : (
               posts.map((post) => (
                 <PostItem

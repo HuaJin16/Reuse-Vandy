@@ -2,6 +2,10 @@ import { useSelector } from "react-redux";
 import { useState, useRef, useEffect } from "react";
 import { ImProfile } from "react-icons/im";
 import { BsFileEarmarkPost } from "react-icons/bs";
+import { VscNewFile } from "react-icons/vsc";
+import { RxUpdate } from "react-icons/rx";
+import { FaTrashCan } from "react-icons/fa6";
+import { RiLogoutBoxRLine } from "react-icons/ri";
 import {
   getDownloadURL,
   getStorage,
@@ -12,6 +16,7 @@ import { app } from "../firebase";
 import { deleteUser, updateUser, logoutUser } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import "../styles/Profile.css";
 
 export default function Profile() {
   const { currentUser } = useSelector((state) => state.user);
@@ -193,9 +198,9 @@ export default function Profile() {
   };
 
   return (
-    <div>
-      <h1>Your Profile</h1>
-      <div>
+    <div className="profile-container">
+      <h1 className="profile-title">Your Profile</h1>
+      <div className="profile-header">
         <input
           onChange={(e) => setFile(e.target.files[0])}
           type="file"
@@ -206,73 +211,90 @@ export default function Profile() {
         <img
           onClick={() => fileRef.current.click()}
           src={formData.avatar || currentUser.avatar}
+          alt="avatar"
+          className="profile-avatar-image"
         />
-        {!isSubmitted && (
-          <p>
-            {uploadError ? (
-              <span>
-                Image upload error (file size or format may not be supported)
-              </span>
-            ) : uploadPercentage > 0 && uploadPercentage < 100 ? (
-              <span>{`Uploading... ${uploadPercentage}%`}</span>
-            ) : uploadPercentage === 100 ? (
-              <span>
-                Image uploaded successfully (update in account tab to save
-                avatar)
-              </span>
-            ) : (
-              " "
-            )}
-          </p>
-        )}
-        <span>
-          {currentUser.firstName} {currentUser.lastName}
-        </span>
-        <span>
-          Joined on {new Date(currentUser.createdAt).toLocaleDateString()}
-        </span>
+        <div className="profile-info">
+          <span className="profile-page-name">
+            {currentUser.firstName} {currentUser.lastName}
+          </span>
+          <span className="profile-joined-date">
+            Joined on {new Date(currentUser.createdAt).toLocaleDateString()}
+          </span>
+          {!isSubmitted && (
+            <p className="profile-upload-status">
+              {uploadError ? (
+                <span className="upload-fail">
+                  Image upload error (file size or format may not be supported)
+                </span>
+              ) : uploadPercentage > 0 && uploadPercentage < 100 ? (
+                <span>{`Uploading... ${uploadPercentage}%`}</span>
+              ) : uploadPercentage === 100 ? (
+                <span className="upload-success">
+                  Image uploaded successfully (update in account tab to save
+                  avatar)
+                </span>
+              ) : (
+                " "
+              )}
+            </p>
+          )}
+        </div>
       </div>
-      <div>
-        <button onClick={() => handleSectionChange("posts")}>
-          <BsFileEarmarkPost /> Posts
-        </button>
-        <button onClick={() => handleSectionChange("account")}>
-          <ImProfile /> Account
-        </button>
-      </div>
-      <div>
+      <div className="profile-content">
+        <div className="profile-nav">
+          <button
+            onClick={() => handleSectionChange("posts")}
+            className="profile-nav-button"
+          >
+            <BsFileEarmarkPost /> Posts
+          </button>
+          <button
+            onClick={() => handleSectionChange("account")}
+            className="profile-nav-button"
+          >
+            <ImProfile /> Account
+          </button>
+        </div>
         {showSection === "posts" && (
-          <div>
-            <div>
-              {userPosts &&
-                userPosts.length > 0 &&
-                userPosts.map((post) => (
-                  <div key={post._id}>
-                    <Link to={`/post/${post._id}`}>
-                      <img src={post.imageUrls[0]} alt="post image" />
+          <div className="profile-posts">
+            {userPosts &&
+              userPosts.length > 0 &&
+              userPosts.map((post) => (
+                <div key={post._id} className="profile-single-post">
+                  <Link
+                    to={`/post/${post._id}`}
+                    className="profile-image-container"
+                  >
+                    <img src={post.imageUrls[0]} alt="post image" />
+                  </Link>
+                  <Link to={`/post/${post._id}`} className="profile-post-title">
+                    {post.title}
+                  </Link>
+                  <div className="post-actions">
+                    <button onClick={() => handleDeletePost(post._id)}>
+                      Delete
+                    </button>
+                    <Link to={`/edit/${post._id}`}>
+                      <button>Edit</button>
                     </Link>
-                    <Link to={`/post/${post._id}`}>{post.title}</Link>
-                    <div>
-                      <button onClick={() => handleDeletePost(post._id)}>
-                        Delete
-                      </button>
-                      <Link to={`/edit/${post._id}`}>
-                        <button>Edit</button>
-                      </Link>
-                    </div>
                   </div>
-                ))}
-            </div>
+                </div>
+              ))}
             {errors.posts && <span>{errors.posts}</span>}
-            <button>
-              <Link to="/new">New Post</Link>
-            </button>
           </div>
         )}
+        {showSection === "posts" && (
+          <button className="new-post-button">
+            <Link to="/new">
+              <VscNewFile /> New Post
+            </Link>
+          </button>
+        )}
         {showSection === "account" && (
-          <div>
-            <form onSubmit={handleSubmit}>
-              <h2>Update one or all fields:</h2>
+          <div className="profile-account">
+            <form onSubmit={handleSubmit} className="update-form">
+              <h2 className="update-title">Update one or more fields:</h2>
               <input
                 type="text"
                 name="firstName"
@@ -291,13 +313,19 @@ export default function Profile() {
                 placeholder="Password"
                 onChange={handleChange}
               />
-              <button type="submit">Update</button>
+              <button type="submit">
+                <RxUpdate /> Update
+              </button>
             </form>
-            <div>
-              <button onClick={handleDeleteUser}>Delete account</button>
-              <button onClick={handleUserLogout}>Logout</button>
+            <div className="account-actions">
+              <button onClick={handleDeleteUser}>
+                <FaTrashCan /> Delete account
+              </button>
+              <button onClick={handleUserLogout}>
+                <RiLogoutBoxRLine /> Logout
+              </button>
             </div>
-            <div>
+            <div className="profile-errors">
               {(errors.password ||
                 errors.auth ||
                 errors.logout ||

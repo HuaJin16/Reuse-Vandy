@@ -1,0 +1,143 @@
+.newPost-container {
+  width: 100%;
+  max-width: 800px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-family: "Oswald", cursive;
+}
+
+.newPost-title {
+  color: black;
+  margin: 0.5rem 0 1rem 0;
+}
+
+.newPost-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-container-title {
+  color: black;
+  text-align: center;
+  margin: 0 0 0.5rem 0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.form-input {
+  max-width: 50%;
+  padding: 3px;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-textArea {
+  width: 70%;
+  min-height: 100px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.upload-error,
+.newPost-error-message,
+.form-error-message {
+  color: rgb(232, 108, 108);
+  margin-bottom: 0.5rem;
+}
+
+.image-preview-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-left: 1rem;
+}
+
+.image-preview {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 1rem 1rem 1rem 0;
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.delete-image-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgb(232, 108, 108);
+  color: white;
+  border: none;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.form-upload-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 0;
+}
+
+.checkbox-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.newPost-create-button {
+  background-color: #0084ff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+}

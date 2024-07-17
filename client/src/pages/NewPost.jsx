@@ -10,6 +10,7 @@ import {
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import CheckboxInput from "../components/CheckboxInput";
+import "../styles/NewPost.css";
 
 export default function NewPost() {
   const [files, setFiles] = useState([]);
@@ -231,37 +232,55 @@ export default function NewPost() {
   };
 
   return (
-    <div>
-      <h1>New Post</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            type="text"
-            name="title"
-            placeholder="Title"
-            onChange={handleChange}
-            value={formData.title}
-          />
-          {createErrors.title && <span>{createErrors.title}</span>}
-          <input
-            type="number"
-            name="price"
-            placeholder="Price"
-            onChange={handleChange}
-            value={formData.price}
-          />
-          {createErrors.price && <span>{createErrors.price}</span>}
-          <input
-            type="text"
-            name="description"
-            placeholder="Description"
-            onChange={handleChange}
-            value={formData.description}
-          />
-          {createErrors.description && <span>{createErrors.description}</span>}
+    <div className="newPost-container">
+      <h1 className="newPost-title">New Post</h1>
+      <form onSubmit={handleSubmit} className="newPost-form">
+        <div className="form-container">
+          <h2 className="form-container-title">Details:</h2>
+          <div className="form-group">
+            <input
+              type="text"
+              name="title"
+              placeholder="Title"
+              onChange={handleChange}
+              value={formData.title}
+              className="form-input"
+            />
+            {createErrors.title && (
+              <span className="form-error-message">{createErrors.title}</span>
+            )}
+          </div>
+          <div className="form-group">
+            <input
+              type="number"
+              name="price"
+              placeholder="Price"
+              onChange={handleChange}
+              value={formData.price}
+              className="form-input"
+            />
+            {createErrors.price && (
+              <span className="form-error-message">{createErrors.price}</span>
+            )}
+          </div>
+          <div className="form-group">
+            <textarea
+              type="text"
+              name="description"
+              placeholder="Description"
+              onChange={handleChange}
+              value={formData.description}
+              className="form-textArea"
+            />
+            {createErrors.description && (
+              <span className="form-error-message">
+                {createErrors.description}
+              </span>
+            )}
+          </div>
         </div>
-        <div>
-          <span>Images (max 6):</span>
+        <div className="form-container">
+          <h2 className="form-container-title">Images (max 6):</h2>
           <input
             onChange={(e) => setFiles(e.target.files)}
             type="file"
@@ -269,32 +288,53 @@ export default function NewPost() {
             accept="image/*"
             multiple
           />
-          <button type="button" onClick={handleImageUpload}>
+          {createErrors.imageUrls && <span>{createErrors.imageUrls}</span>}
+          {uploadError && <span className="upload-error">{uploadError}</span>}
+          <div className="image-preview-container">
+            {formData.imageUrls.map((url, index) => (
+              <div key={index} className="image-preview">
+                <img src={url} alt="uploaded" className="preview-image" />
+                <button
+                  onClick={() => handleRemoveImage(index)}
+                  type="button"
+                  className="delete-image-button"
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={handleImageUpload}
+            className="form-upload-button"
+          >
             {uploadPercentage > 0 && uploadPercentage < 100
               ? `Uploading... ${uploadPercentage}%`
               : "Upload"}
           </button>
-          {createErrors.imageUrls && <span>{createErrors.imageUrls}</span>}
-          {uploadError && <span>{uploadError}</span>}
-          {formData.imageUrls.map((url, index) => (
-            <div key={index}>
-              <img src={url} alt="uploaded" />
-              <button onClick={() => handleRemoveImage(index)} type="button">
-                Delete
-              </button>
-            </div>
-          ))}
         </div>
-        <div>
-          <span>Categories:</span>
-          {renderCheckboxes(categories)}
-          <span>Tags:</span>
-          {renderCheckboxes(tags)}
+        <div className="form-container">
+          <div className="checkbox-container">
+            <h2 className="form-container-title">Categories:</h2>
+            <div className="checkbox-group">{renderCheckboxes(categories)}</div>
+            <h2 className="form-container-title">Tags:</h2>
+            <div className="checkbox-group">{renderCheckboxes(tags)}</div>
+          </div>
         </div>
-        <button disabled={uploadPercentage > 0 && uploadPercentage < 100}>
-          Create
-        </button>
-        {createErrors.general && <span>{createErrors.general}</span>}
+        <div className="form-container">
+          <button
+            disabled={uploadPercentage > 0 && uploadPercentage < 100}
+            className="newPost-create-button"
+          >
+            Create
+          </button>
+          {createErrors.general && (
+            <span className="newPost-error-message">
+              {createErrors.general}
+            </span>
+          )}
+        </div>
       </form>
     </div>
   );

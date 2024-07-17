@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import "../styles/MessagesList.css";
 
 export default function MessagesList() {
   const [conversations, setConversations] = useState([]);
@@ -43,25 +44,42 @@ export default function MessagesList() {
   };
 
   return (
-    <div>
-      <h2>Messages</h2>
-      {errors.general && <span>{errors.general}</span>}
-      <ul>
+    <div className="messagesList-container">
+      <h2 className="messagesList-title">Messages</h2>
+      {(errors.general || errors.messages) && (
+        <span className="messagesList-errors">
+          {errors.general || errors.messages}
+        </span>
+      )}
+      <ul className="conversations-list">
         {errors.messages
           ? errors.messages
           : conversations.map((conv) => (
-              <li key={conv.conversationId}>
-                <Link to={`/message/${conv.recipient._id}`}>
-                  <img src={conv.avatar} alt={conv.recipient.firstName} />
-                  <span>
-                    {conv.recipient.firstName} {conv.recipient.lastName}
-                  </span>
-                  <p>
-                    {conv.lastMessage.senderId === conv.recipient._id
-                      ? conv.lastMessage.message
-                      : `You: ${conv.lastMessage.message}`}
-                  </p>
-                  <p>{formatDate(conv.lastMessage.updatedAt)}</p>
+              <li key={conv.conversationId} className="conversation-item">
+                <Link
+                  to={`/message/${conv.recipient._id}`}
+                  className="conversation-link"
+                >
+                  <div className="conversation-avatar">
+                    <img
+                      src={conv.recipient.avatar}
+                      alt="avatar"
+                      className="conversation-avatar-image"
+                    />
+                  </div>
+                  <div className="conversation-content">
+                    <h3 className="conversation-name">
+                      {conv.recipient.firstName} {conv.recipient.lastName}
+                    </h3>
+                    <p className="conversation-last-message">
+                      {conv.lastMessage.senderId === conv.recipient._id
+                        ? conv.lastMessage.message
+                        : `You: ${conv.lastMessage.message}`}
+                    </p>
+                    <p className="conversation-time">
+                      {formatDate(conv.lastMessage.updatedAt)}
+                    </p>
+                  </div>
                 </Link>
               </li>
             ))}

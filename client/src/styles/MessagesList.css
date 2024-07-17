@@ -1,0 +1,100 @@
+.messagesList-container {
+  max-width: 800px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.messagesList-title {
+  font-family: "Oswald", cursive;
+  font-size: 3rem;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: black;
+}
+
+.messagesList-errors {
+  color: rgb(232, 108, 108);
+}
+
+.conversations-list {
+  padding: 0;
+  margin: 0;
+  width: 60%;
+}
+
+.conversation-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 20px 0;
+}
+
+.conversation-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.conversation-link:hover {
+  color: #0084ff;
+}
+
+.conversation-avatar {
+  margin-right: 1rem;
+}
+
+.conversation-avatar-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.conversation-content {
+  flex-grow: 1;
+  width: 100%;
+}
+
+.conversation-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 0;
+  margin: 0;
+}
+
+.conversation-last-message {
+  font-size: 1rem;
+  margin: 5px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.conversation-time {
+  font-size: 1rem;
+  padding: 0;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .conversations-list {
+    width: 100%;
+  }
+
+  .conversation-link {
+    flex-direction: column;
+    align-items: center;
+  }
+}

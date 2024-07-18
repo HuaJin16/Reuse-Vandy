@@ -10,7 +10,7 @@ import {
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import CheckboxInput from "../components/CheckboxInput";
-import "../styles/NewPost.css";
+import "../styles/NewEditPost.css";
 
 export default function NewPost() {
   const [files, setFiles] = useState([]);
@@ -232,9 +232,9 @@ export default function NewPost() {
   };
 
   return (
-    <div className="newPost-container">
-      <h1 className="newPost-title">New Post</h1>
-      <form onSubmit={handleSubmit} className="newPost-form">
+    <div className="NewEditPost-container">
+      <h1 className="NewEditPost-title">New Post</h1>
+      <form onSubmit={handleSubmit} className="NewEditPost-form">
         <div className="form-container">
           <h2 className="form-container-title">Details:</h2>
           <div className="form-group">
@@ -288,12 +288,16 @@ export default function NewPost() {
             accept="image/*"
             multiple
           />
-          {createErrors.imageUrls && <span>{createErrors.imageUrls}</span>}
-          {uploadError && <span className="upload-error">{uploadError}</span>}
+          {createErrors.imageUrls && (
+            <span className="form-error-message">{createErrors.imageUrls}</span>
+          )}
+          {uploadError && (
+            <span className="form-error-message">{uploadError}</span>
+          )}
           <div className="image-preview-container">
             {formData.imageUrls.map((url, index) => (
               <div key={index} className="image-preview">
-                <img src={url} alt="uploaded" className="preview-image" />
+                <img src={url} alt="uploaded" className="NewEditPost-image" />
                 <button
                   onClick={() => handleRemoveImage(index)}
                   type="button"

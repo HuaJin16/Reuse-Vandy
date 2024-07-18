@@ -1,4 +1,4 @@
-.newPost-container {
+.NewEditPost-container {
   width: 100%;
   max-width: 800px;
   padding: 20px;
@@ -7,12 +7,12 @@
   font-family: "Oswald", cursive;
 }
 
-.newPost-title {
+.NewEditPost-title {
   color: black;
   margin: 0.5rem 0 1rem 0;
 }
 
-.newPost-form {
+.NewEditPost-form {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -60,9 +60,9 @@
   font-size: 1rem;
 }
 
-.upload-error,
+.form-error-message,
 .newPost-error-message,
-.form-error-message {
+.editPost-error-message {
   color: rgb(232, 108, 108);
   margin-bottom: 0.5rem;
 }
@@ -82,7 +82,7 @@
   margin: 1rem 1rem 1rem 0;
 }
 
-.preview-image {
+.NewEditPost-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -132,7 +132,8 @@
   margin-bottom: 15px;
 }
 
-.newPost-create-button {
+.newPost-create-button,
+.editPost-edit-button {
   background-color: #0084ff;
   color: white;
   padding: 10px 20px;

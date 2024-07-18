@@ -15,7 +15,7 @@ import {
 import { app } from "../firebase";
 import { deleteUser, updateUser, logoutUser } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/Profile.css";
 
 export default function Profile() {
@@ -31,6 +31,7 @@ export default function Profile() {
   const [userPosts, setUserPosts] = useState([]);
   const fileRef = useRef(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSectionChange = (section) => {
     setShowSection(section);
@@ -117,10 +118,11 @@ export default function Profile() {
       );
       const userData = await res.json();
       if (userData.authErrors) {
-        setErrors(UserData.authErrors);
+        setErrors(userData.authErrors);
       } else {
         setErrors({});
         dispatch(deleteUser(userData));
+        navigate("/access");
       }
     } catch (err) {
       setErrors({ auth: err.message });
@@ -137,6 +139,7 @@ export default function Profile() {
       } else {
         setErrors({});
         dispatch(logoutUser(userData));
+        navigate("/access");
       }
     } catch (err) {
       setErrors({ logout: err.message });

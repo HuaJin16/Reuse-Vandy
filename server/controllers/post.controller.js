@@ -59,6 +59,9 @@ const deletePost = async (req, res) => {
 
       // emit the notification to all connected clients
       req.app.get("io").emit("new_notification");
+
+      // emit socket event for unsaved post
+      req.app.get("io").emit("post_deleted");
     }
 
     await Post.findByIdAndDelete(req.params.id);

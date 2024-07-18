@@ -115,7 +115,7 @@
   border-radius: 20px;
   overflow: hidden;
   transition: box-shadow 0.3s;
-  margin: 1rem 0.5rem;
+  margin: 1rem 0.5rem 0 0.5rem;
   width: 230px;
   height: 280px;
 }
@@ -176,6 +176,7 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   transition: border-color 0.3s;
+  margin-top: 0.5rem;
 }
 
 .new-post-button a {

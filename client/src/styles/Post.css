@@ -142,13 +142,15 @@
   margin-bottom: 20px;
 }
 
+.post-buttons,
 .single-post-link {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 100%;
 }
 
-.post-details button {
-  width: 100%;
+.post-buttons button {
   padding: 10px;
   margin-bottom: 10px;
   border: none;

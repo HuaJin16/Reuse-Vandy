@@ -46,46 +46,52 @@ export default function Header() {
           const unreadNotifications = data.filter((notif) => !notif.read);
           setUnreadNotifCount(unreadNotifications.length);
         }
-
         // retrieve intial saved posts count
         setSavedPostCount(savedPosts.length);
-
-        // establish WebSocket connection
-        const newSocket = io("http://localhost:8000");
-
-        // listen for new notifications
-        newSocket.on("new_notification", () => {
-          setUnreadNotifCount((prevCount) => prevCount + 1);
-        });
-
-        // listen for read notifications
-        newSocket.on("notification_read", () => {
-          setUnreadNotifCount((prevCount) => Math.max(0, prevCount - 1));
-        });
-
-        // listen for deleted, unread notifications
-        newSocket.on("notification_deleted", () => {
-          setUnreadNotifCount((prevCount) => Math.max(0, prevCount - 1));
-        });
-
-        // listen for newly saved posts
-        newSocket.on("post_save", () => {
-          setSavedPostCount((prevCount) => prevCount + 1);
-        });
-
-        // listen for newly unsaved posts
-        newSocket.on("post_unsave", () => {
-          setSavedPostCount((prevCount) => Math.max(0, prevCount - 1));
-        });
-
-        // WebSocket cleanup
-        return () => newSocket.close();
       } catch (err) {
         console.log(err);
       }
     };
     getInitialData();
   }, []);
+
+  useEffect(() => {
+    // establish WebSocket connection
+    const newSocket = io("http://localhost:8000");
+
+    // listen for new notifications
+    newSocket.on("new_notification", () => {
+      setUnreadNotifCount((prevCount) => prevCount + 1);
+    });
+
+    // listen for read notifications
+    newSocket.on("notification_read", () => {
+      setUnreadNotifCount((prevCount) => Math.max(0, prevCount - 1));
+    });
+
+    // listen for deleted, unread notifications
+    newSocket.on("notification_deleted", () => {
+      setUnreadNotifCount((prevCount) => Math.max(0, prevCount - 1));
+    });
+
+    // listen for newly saved posts
+    newSocket.on("post_save", () => {
+      setSavedPostCount((prevCount) => prevCount + 1);
+    });
+
+    // listen for newly unsaved posts
+    newSocket.on("post_unsave", () => {
+      setSavedPostCount((prevCount) => Math.max(0, prevCount - 1));
+    });
+
+    // listen for newly deleted posts
+    newSocket.on("post_deleted", () => {
+      setSavedPostCount((prevCount) => Math.max(0, prevCount - 1));
+    });
+
+    // WebSocket cleanup
+    return () => newSocket.close();
+  }, [currentUser]);
 
   return (
     <header className="header">

@@ -52,37 +52,41 @@ export default function MessagesList() {
         </span>
       )}
       <ul className="conversations-list">
-        {errors.messages
-          ? errors.messages
-          : conversations.map((conv) => (
-              <li key={conv.conversationId} className="conversation-item">
-                <Link
-                  to={`/message/${conv.recipient._id}`}
-                  className="conversation-link"
-                >
-                  <div className="conversation-avatar">
-                    <img
-                      src={conv.recipient.avatar}
-                      alt="avatar"
-                      className="conversation-avatar-image"
-                    />
-                  </div>
-                  <div className="conversation-content">
-                    <h3 className="conversation-name">
-                      {conv.recipient.firstName} {conv.recipient.lastName}
-                    </h3>
-                    <p className="conversation-last-message">
-                      {conv.lastMessage.senderId === conv.recipient._id
-                        ? conv.lastMessage.message
-                        : `You: ${conv.lastMessage.message}`}
-                    </p>
-                    <p className="conversation-time">
-                      {formatDate(conv.lastMessage.updatedAt)}
-                    </p>
-                  </div>
-                </Link>
-              </li>
-            ))}
+        {errors.messages ? (
+          errors.messages
+        ) : conversations.length === 0 ? (
+          <span className="messages-none">No messages found</span>
+        ) : (
+          conversations.map((conv) => (
+            <li key={conv.conversationId} className="conversation-item">
+              <Link
+                to={`/message/${conv.recipient._id}`}
+                className="conversation-link"
+              >
+                <div className="conversation-avatar">
+                  <img
+                    src={conv.recipient.avatar}
+                    alt="avatar"
+                    className="conversation-avatar-image"
+                  />
+                </div>
+                <div className="conversation-content">
+                  <h3 className="conversation-name">
+                    {conv.recipient.firstName} {conv.recipient.lastName}
+                  </h3>
+                  <p className="conversation-last-message">
+                    {conv.lastMessage.senderId === conv.recipient._id
+                      ? conv.lastMessage.message
+                      : `You: ${conv.lastMessage.message}`}
+                  </p>
+                  <p className="conversation-time">
+                    {formatDate(conv.lastMessage.updatedAt)}
+                  </p>
+                </div>
+              </Link>
+            </li>
+          ))
+        )}
       </ul>
     </div>
   );

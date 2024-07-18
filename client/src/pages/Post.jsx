@@ -10,12 +10,14 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { addSavedPost, removeSavedPost } from "../redux/user/userSlice";
+import { io } from "socket.io-client";
 import "../styles/Post.css";
 
 export default function Post() {
   const [errors, setErrors] = useState({});
   const [post, setPost] = useState(null);
   const [postUser, setPostUser] = useState(null);
+  const [socket, setSocket] = useState(null);
   const params = useParams();
   const navigate = useNavigate();
   const { currentUser, savedPosts } = useSelector((state) => state.user);
@@ -24,6 +26,12 @@ export default function Post() {
     : false;
   const dispatch = useDispatch();
   SwiperCore.use([Navigation]);
+
+  useEffect(() => {
+    // establish WebSocket connection
+    const newSocket = io("http://localhost:8000");
+    setSocket(newSocket);
+  }, []);
 
   // fetches and sets post data on mount or when postId changes
   useEffect(() => {
@@ -117,8 +125,10 @@ export default function Post() {
       } else {
         if (isSaved) {
           dispatch(removeSavedPost(post._id));
+          socket.emit("post_unsave");
         } else {
           dispatch(addSavedPost(post));
+          socket.emit("post_save");
         }
       }
     } catch (err) {
@@ -134,7 +144,11 @@ export default function Post() {
         <div className="single-post">
           <div
             className="postUser-info"
-            onClick={() => navigate(`/user/${postUser._id}`)}
+            onClick={() => {
+              postUser._id === currentUser._id
+                ? navigate("/profile")
+                : navigate(`/user/${postUser._id}`);
+            }}
           >
             <img
               src={postUser.avatar}
@@ -184,22 +198,29 @@ export default function Post() {
             <p className="single-post-date">
               Posted on {new Date(post.createdAt).toLocaleDateString()}
             </p>
-            <button onClick={() => handleSaveUnsave()}>
-              {isSaved ? (
-                <span>
-                  <IoStorefrontOutline /> Unsave
-                </span>
-              ) : (
-                <span>
-                  <IoStorefrontOutline /> Save
-                </span>
-              )}
-            </button>
-            <Link to={`/message/${post.userRef}`} className="single-post-link">
-              <button>
-                <BiMessageDetail /> Message
-              </button>
-            </Link>
+            {postUser._id !== currentUser._id && (
+              <div className="post-buttons">
+                <button onClick={() => handleSaveUnsave()}>
+                  {isSaved ? (
+                    <span>
+                      <IoStorefrontOutline /> Unsave
+                    </span>
+                  ) : (
+                    <span>
+                      <IoStorefrontOutline /> Save
+                    </span>
+                  )}
+                </button>
+                <Link
+                  to={`/message/${post.userRef}`}
+                  className="single-post-link"
+                >
+                  <button>
+                    <BiMessageDetail /> Message
+                  </button>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}

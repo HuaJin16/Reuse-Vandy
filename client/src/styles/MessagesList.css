@@ -28,6 +28,11 @@
   width: 60%;
 }
 
+.saved-none {
+  font-size: 1.2rem;
+  color: #333;
+}
+
 .conversation-item {
   display: flex;
   flex-direction: column;

@@ -15,7 +15,11 @@ export default function Home() {
       try {
         const res = await fetch(`http://localhost:8000/post/get?limit=12`);
         const data = await res.json();
-        setNewestPosts(data.posts);
+        // filter out the current user's posts
+        const filteredPosts = data.posts.filter(
+          (post) => post.userRef !== currentUser._id
+        );
+        setNewestPosts(filteredPosts);
       } catch (err) {
         console.log(err);
       }
@@ -54,7 +58,9 @@ export default function Home() {
       <div className="home-newest">
         <h1 className="newest-title">Newest Posts</h1>
         <Swiper navigation className="home-swiper">
-          {newestPosts.length > 0 &&
+          {newestPosts.length === 0 ? (
+            <span className="home-none">No posts found</span>
+          ) : (
             groupPosts(newestPosts).map((group, index) => (
               <SwiperSlide key={index} className="home-slide">
                 {group.map((post) => (
@@ -77,7 +83,8 @@ export default function Home() {
                   </Link>
                 ))}
               </SwiperSlide>
-            ))}
+            ))
+          )}
         </Swiper>
       </div>
     </div>

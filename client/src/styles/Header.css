@@ -3,7 +3,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 2rem;
+  padding: 1rem 2rem;
   border: 1px solid #ccc;
   border-radius: 20px;
   margin-bottom: 1rem;
@@ -19,7 +19,7 @@
 }
 
 .logo-text {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: bold;
   color: #fad25a;
   font-family: "Oswald", cursive;

@@ -3,6 +3,9 @@ const handleErrors = require("../utils/errors");
 const bcrypt = require("bcrypt");
 const Post = require("../models/post.model");
 const SavedPost = require("../models/savedPost.model");
+const Message = require("../models/message.model");
+const Notification = require("../models/notification.model");
+const Conversation = require("../models/conversation.model");
 
 // retrieve the specified user's information
 const getUser = async (req, res) => {
@@ -60,6 +63,28 @@ const deleteUser = async (req, res) => {
     if (req.user.id !== req.params.id) throw Error("unauthorized");
 
     await User.findByIdAndDelete(req.params.id);
+
+    // delete all posts for the current user
+    await Post.deleteMany({ userRef: req.user.id });
+
+    // delete all saved posts for the current user
+    await SavedPost.deleteMany({ userId: req.user.id });
+
+    // delete all notifications for the current user
+    await Notification.deleteMany({
+      $or: [{ recipientId: req.user.id }, { senderId: req.user.id }],
+    });
+
+    // delete all messages where the user is either the sender or receiver
+    await Message.deleteMany({
+      $or: [{ senderId: req.user.id }, { recipientId: req.user.id }],
+    });
+
+    // delete all conversations for the current user
+    await Conversation.deleteMany({
+      users: req.user.id,
+    });
+
     res.clearCookie("access_token");
     res.status(200).json("User deleted");
   } catch (err) {

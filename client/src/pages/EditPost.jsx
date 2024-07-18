@@ -9,6 +9,8 @@ import {
 } from "firebase/storage";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import CheckboxInput from "../components/CheckboxInput";
+import "../styles/NewEditPost.css";
 
 export default function EditPost() {
   const [files, setFiles] = useState([]);
@@ -18,6 +20,19 @@ export default function EditPost() {
     price: "",
     description: "",
     imageUrls: [],
+    tickets: false,
+    clothes: false,
+    merch: false,
+    electronics: false,
+    furniture: false,
+    housing: false,
+    books: false,
+    miscellaneous: false,
+    new: false,
+    lightlyUsed: false,
+    used: false,
+    obo: false,
+    free: false,
   });
   const [uploadError, setUploadError] = useState(false);
   const [createErrors, setCreateErrors] = useState(false);
@@ -106,7 +121,31 @@ export default function EditPost() {
 
   // function to update form data and clear corresonding error states on input changes
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { type, name, checked, value } = e.target;
+    const isCheckbox = type === "checkbox";
+    // ensure only one condition can be checked at a time
+    if (name === "new" || name === "lightlyUsed" || name === "used") {
+      setFormData({
+        ...formData,
+        new: name === "new" ? checked : false,
+        lightlyUsed: name === "lightlyUsed" ? checked : false,
+        used: name === "used" ? checked : false,
+      });
+    }
+    // ensure only one of "obo" or "free" can be checked at a time
+    else if (name === "obo" || name === "free") {
+      setFormData({
+        ...formData,
+        obo: name === "obo" ? checked : false,
+        free: name === "free" ? checked : false,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: isCheckbox ? checked : value,
+      });
+    }
+
     setCreateErrors((prevCreateErrors) => ({
       ...prevCreateErrors,
       [e.target.name]: "",
@@ -135,7 +174,25 @@ export default function EditPost() {
       if (data.postErrors) {
         setCreateErrors(data.postErrors);
       } else {
-        setFormData({ type: "", price: "", description: "", imageUrls: [] });
+        setFormData({
+          type: "",
+          price: "",
+          description: "",
+          imageUrls: [],
+          tickets: false,
+          clothes: false,
+          merch: false,
+          electronics: false,
+          furniture: false,
+          housing: false,
+          books: false,
+          miscellaneous: false,
+          new: false,
+          lightlyUsed: false,
+          used: false,
+          obo: false,
+          free: false,
+        });
         setFiles([]);
         setUploadPercentage(0);
         setUploadError(false);
@@ -147,38 +204,103 @@ export default function EditPost() {
     }
   };
 
+  // function to get the label text for a given key
+  const getDisplayText = (key) => {
+    const mapping = {
+      tickets: "Tickets",
+      clothes: "Clothes",
+      merch: "Merch",
+      electronics: "Electronics",
+      furniture: "Furniture",
+      housing: "Housing",
+      books: "Books",
+      miscellaneous: "Miscellaneous",
+      new: "New",
+      lightlyUsed: "Lightly Used",
+      used: "Used",
+      obo: "OBO",
+      free: "Free",
+    };
+    return mapping[key];
+  };
+
+  const categories = [
+    "tickets",
+    "clothes",
+    "merch",
+    "electronics",
+    "furniture",
+    "housing",
+    "books",
+    "miscellaneous",
+  ];
+
+  const tags = ["new", "lightlyUsed", "used", "obo", "free"];
+
+  // function to display categories and tags as checkbox inputs
+  const renderCheckboxes = (keys) => {
+    return keys.map((key) => (
+      <CheckboxInput
+        key={key}
+        label={getDisplayText(key)}
+        name={key}
+        value={key}
+        checked={formData[key]}
+        onChange={handleChange}
+      />
+    ));
+  };
+
   return (
-    <div>
-      <h1>Edit Post</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            type="text"
-            name="title"
-            placeholder="Title"
-            onChange={handleChange}
-            value={formData.title}
-          />
-          {createErrors.title && <span>{createErrors.title}</span>}
-          <input
-            type="number"
-            name="price"
-            placeholder="Price"
-            onChange={handleChange}
-            value={formData.price}
-          />
-          {createErrors.price && <span>{createErrors.price}</span>}
-          <input
-            type="text"
-            name="description"
-            placeholder="Description"
-            onChange={handleChange}
-            value={formData.description}
-          />
-          {createErrors.description && <span>{createErrors.description}</span>}
+    <div className="NewEditPost-container">
+      <h1 className="NewEditPost-title">Edit Post</h1>
+      <form onSubmit={handleSubmit} className="NewEditPost-form">
+        <div className="form-container">
+          <h2 className="form-container-title">Details:</h2>
+          <div className="form-group">
+            <input
+              type="text"
+              name="title"
+              placeholder="Title"
+              onChange={handleChange}
+              value={formData.title}
+              className="form-input"
+            />
+            {createErrors.title && (
+              <span className="form-error-messasge">{createErrors.title}</span>
+            )}
+          </div>
+          <div className="form-group">
+            <input
+              type="number"
+              name="price"
+              placeholder="Price"
+              onChange={handleChange}
+              value={formData.price}
+              className="form-input"
+            />
+            {createErrors.price && (
+              <span className="form-error-message">{createErrors.price}</span>
+            )}
+          </div>
+          <div className="form-group">
+            <textarea
+              type="text"
+              name="description"
+              placeholder="Description"
+              onChange={handleChange}
+              value={formData.description}
+              className="form-textArea"
+            />
+            {createErrors.description && (
+              <span className="form-error-message">
+                {createErrors.description}
+              </span>
+            )}
+          </div>
         </div>
-        <div>
-          <span>Images (max 6):</span>
+        <div className="form-container">
+          <h2 className="form-container-title">Images (max 6):</h2>
           <input
             onChange={(e) => setFiles(e.target.files)}
             type="file"
@@ -186,26 +308,55 @@ export default function EditPost() {
             accept="image/*"
             multiple
           />
-          <button type="button" onClick={handleImageUpload}>
+          {createErrors.imageUrls && (
+            <span className="form-error-message">{createErrors.imageUrls}</span>
+          )}
+          {uploadError && (
+            <span className="form-error-message">{uploadError}</span>
+          )}
+          <div className="image-preview-container">
+            {formData.imageUrls.map((url, index) => (
+              <div key={index} className="image-preview">
+                <img src={url} alt="uploaded" className="NewEditPost-image" />
+                <button
+                  onClick={() => handleRemoveImage(index)}
+                  type="button"
+                  className="delete-image-button"
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={handleImageUpload}
+            className="form-upload-button"
+          >
             {uploadPercentage > 0 && uploadPercentage < 100
               ? `Uploading... ${uploadPercentage}%`
               : "Upload"}
           </button>
-          {createErrors.imageUrls && <span>{createErrors.imageUrls}</span>}
-          {uploadError && <span>{uploadError}</span>}
-          {formData.imageUrls.map((url, index) => (
-            <div key={index}>
-              <img src={url} alt="uploaded" />
-              <button onClick={() => handleRemoveImage(index)} type="button">
-                Delete
-              </button>
-            </div>
-          ))}
         </div>
-        <button disabled={uploadPercentage > 0 && uploadPercentage < 100}>
-          Edit
-        </button>
-        {createErrors.general && <span>{createErrors.general}</span>}
+        <div className="form-container">
+          <div className="checkbox-container">
+            <h2 className="form-container-title">Categories:</h2>
+            <div className="checkbox-group">{renderCheckboxes(categories)}</div>
+            <h2 className="form-container-title">Tags:</h2>
+            <div className="checkbox-group">{renderCheckboxes(tags)}</div>
+          </div>
+        </div>
+        <div className="form-container">
+          <button
+            disabled={uploadPercentage > 0 && uploadPercentage < 100}
+            className="editPost-edit-button"
+          >
+            Edit
+          </button>
+        </div>
+        {createErrors.general && (
+          <span className="editPost-error-message">{createErrors.general}</span>
+        )}
       </form>
     </div>
   );

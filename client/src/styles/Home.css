@@ -76,6 +76,11 @@
   width: 100%;
 }
 
+.home-none {
+  font-size: 1.2rem;
+  color: #333;
+}
+
 .home-slide {
   display: flex;
   flex-direction: row;

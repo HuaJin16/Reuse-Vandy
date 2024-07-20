@@ -13,6 +13,7 @@ const handleErrors = (err) => {
     posts: "",
     notifications: "",
     messages: "",
+    users: "",
   };
 
   /* HANDLE DUPLICATE EMAIL ERROR*/
@@ -84,6 +85,11 @@ const handleErrors = (err) => {
     if (err.message.includes("Conversation")) {
       errors.messages = "Invalid notification ID format";
     }
+  }
+
+  /* HANDLE USER ERRORS */
+  if (err.message.includes("No users found")) {
+    errors.users = "No users found";
   }
 
   return errors;

@@ -16,6 +16,16 @@ const register = async (req, res) => {
       avatar,
     });
     const savedUser = await newUser.save();
+
+    // emit a socket event for newly registered users
+    req.app
+      .get("io")
+      .emit("new_user", {
+        id: savedUser._id,
+        firstName: savedUser.firstName,
+        lastName: savedUser.lastName,
+      });
+
     res.status(201).json(savedUser);
   } catch (err) {
     const inputErrors = handleErrors(err);

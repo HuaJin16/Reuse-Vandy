@@ -86,6 +86,10 @@ const deleteUser = async (req, res) => {
     });
 
     res.clearCookie("access_token");
+
+    // emit a socket event for the deleted user
+    req.app.get("io").emit("user_deleted", req.user.id);
+
     res.status(200).json("User deleted");
   } catch (err) {
     const authErrors = handleErrors(err);
@@ -176,6 +180,18 @@ const getSavedPosts = async (req, res) => {
   }
 };
 
+const getUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    if (users.length === 0) throw Error("No users found");
+
+    res.status(200).json(users);
+  } catch (err) {
+    const userErrors = handleErrors(err);
+    return res.status(400).json({ userErrors });
+  }
+};
+
 module.exports = {
   getUser,
   updateUser,
@@ -183,4 +199,5 @@ module.exports = {
   getPosts,
   saveUnsavePost,
   getSavedPosts,
+  getUsers,
 };

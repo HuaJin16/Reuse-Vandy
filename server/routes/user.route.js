@@ -7,10 +7,12 @@ const {
   getPosts,
   saveUnsavePost,
   getSavedPosts,
+  getUsers,
 } = require("../controllers/user.controller");
 
 const router = express.Router();
 
+router.get("/get", getUsers);
 router.get("/:userId", verifyToken, getUser);
 router.post("/update/:id", verifyToken, updateUser);
 router.delete("/delete/:id", verifyToken, deleteUser);

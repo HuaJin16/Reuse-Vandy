@@ -1,0 +1,126 @@
+.access-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 650px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.access-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.access-title {
+  font-size: 3.5rem;
+  font-family: "Oswald", cursive;
+  color: #fad25a;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.access-subtitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-family: "Oswald", cursive;
+  color: black;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.icon-store {
+  margin-left: 0.5rem;
+  font-size: 2rem;
+}
+
+.access-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.access-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  margin: 1rem 0;
+}
+
+.icon {
+  margin: 0;
+}
+
+.icon-person {
+  font-size: 100px;
+  color: #0084ff;
+}
+
+.icon-cycle {
+  font-size: 80px;
+  color: #4caf50;
+}
+
+.access-stats {
+  width: 100%;
+}
+
+.user-stats-title,
+.new-user-title {
+  width: 100%;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  font-family: "Oswald", cursive;
+  color: black;
+}
+
+.new-user-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.new-user-item {
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 10px 15px;
+  margin-bottom: 0.5rem;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.access-links-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.access-link {
+  font-size: 1rem;
+  color: black;
+  transition: color 0.3s ease;
+}
+
+.access-link:hover {
+  color: #0084ff;
+}
+
+.access-error-message {
+  color: rgb(232, 108, 108);
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0;
+}

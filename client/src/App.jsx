@@ -22,12 +22,13 @@ function App() {
   const location = useLocation();
   const hideHeaderRoutes = ["/access", "/login", "/register"];
   const isSearchPage = location.pathname === "/search";
+  const isAuthPage = hideHeaderRoutes.includes(location.pathname);
 
   return (
-    <div className="app-container">
+    <div className={`app-container ${isAuthPage ? "auth-page" : ""}`}>
       {!hideHeaderRoutes.includes(location.pathname) && <Header />}
       {!hideHeaderRoutes.includes(location.pathname) && <CategoryButtons />}
-      <div className={`page-content ${isSearchPage ? "search-page" : ""}`}>
+      <div className={`page-content ${isSearchPage ? "search-page" : ""}}`}>
         <Routes>
           <Route element={<PrivateRoute />}>
             <Route path="/" element={<Home />} />

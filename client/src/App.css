@@ -21,6 +21,10 @@
   padding-bottom: 1rem;
 }
 
+.app-container.auth-page {
+  justify-content: center;
+}
+
 .page-content {
   display: flex;
   flex-direction: column;

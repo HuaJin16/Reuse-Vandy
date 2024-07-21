@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { BsPersonPlusFill } from "react-icons/bs";
+import "../styles/AuthPages.css";
 
 export default function Register() {
   const [data, setData] = useState({
@@ -43,54 +45,78 @@ export default function Register() {
   };
 
   return (
-    <div>
-      <div>
-        <Link to="/access">
-          <span>Reuse, Vandy!</span>
-        </Link>
-      </div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="firstName"
-          placeholder="First name"
-          value={data.firstName}
-          onChange={handleChange}
-        />
-        {errors.firstName && <span>{errors.firstName}</span>}
-        <input
-          type="text"
-          name="lastName"
-          placeholder="Last name"
-          value={data.lastName}
-          onChange={handleChange}
-        />
-        {errors.lastName && <span>{errors.lastName}</span>}
-        <input
-          type="text"
-          name="email"
-          placeholder="School email"
-          value={data.email}
-          onChange={handleChange}
-        />
-        {errors.email && <span>{errors.email}</span>}
-        <input
-          type="text"
-          name="password"
-          placeholder="Password"
-          value={data.password}
-          onChange={handleChange}
-        />
-        {errors.password && <span>{errors.password}</span>}
-        <button type="submit">Register</button>
+    <div className="auth-container">
+      <Link to="/access" className="auth-link">
+        <span className="auth-logo-text">Reuse, Vandy!</span>
+      </Link>
+      <form onSubmit={handleSubmit} className="auth-form">
+        <div className="auth-group">
+          <input
+            type="text"
+            name="firstName"
+            placeholder="First name"
+            value={data.firstName}
+            onChange={handleChange}
+            className="auth-input"
+          />
+          {errors.firstName && (
+            <span className="auth-error-message">{errors.firstName}</span>
+          )}
+        </div>
+        <div className="auth-group">
+          <input
+            type="text"
+            name="lastName"
+            placeholder="Last name"
+            value={data.lastName}
+            onChange={handleChange}
+            className="auth-input"
+          />
+          {errors.lastName && (
+            <span className="auth-error-message">{errors.lastName}</span>
+          )}
+        </div>
+        <div className="auth-group">
+          <input
+            type="text"
+            name="email"
+            placeholder="School email"
+            value={data.email}
+            onChange={handleChange}
+            className="auth-input"
+          />
+          {errors.email && (
+            <span className="auth-error-message">{errors.email}</span>
+          )}
+        </div>
+        <div className="auth-group">
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={data.password}
+            onChange={handleChange}
+            className="auth-input"
+          />
+          {errors.password && (
+            <span className="auth-error-message">{errors.password}</span>
+          )}
+        </div>
+        <div className="auth-group">
+          <button type="submit" className="auth-button">
+            <BsPersonPlusFill className="auth-icon" /> Register
+          </button>
+        </div>
       </form>
-      <div>
-        <span>Already have an account?</span>
-        <Link to="/login">
+      <div className="auth-footer">
+        <span className="auth-prompt">Already have an account?</span>
+        <Link to="/login" className="auth-footer-link">
           <span>Sign in</span>
         </Link>
       </div>
-      {errors.general && <span>{errors.general}</span>}
+      {errors.general && (
+        <span className="auth-error-message">{errors.general}</span>
+      )}
     </div>
   );
 }

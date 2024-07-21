@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
+import { GrPowerCycle } from "react-icons/gr";
+import { VscPerson } from "react-icons/vsc";
+import { LiaStoreAltSolid } from "react-icons/lia";
+import "../styles/Access.css";
 
 export default function Access() {
   const [totalUsers, setTotalUsers] = useState(0);
@@ -18,7 +22,7 @@ export default function Access() {
           setErrors(data.userErrors);
         } else {
           setTotalUsers(data.length);
-          setNewestUsers(data.slice(-3).reverse());
+          setNewestUsers(data.slice(-5).reverse());
         }
       } catch (err) {
         setErrors({ general: err.message });
@@ -47,36 +51,45 @@ export default function Access() {
   }, []);
 
   return (
-    <div>
-      <div>
-        <h1>Reuse, Vandy!</h1>
-        <h2>A Campus Marketplace</h2>
+    <div className="access-container">
+      <div className="access-header">
+        <h1 className="access-title">Reuse, Vandy!</h1>
+        <h2 className="access-subtitle">
+          A Campus Marketplace <LiaStoreAltSolid className="icon-store" />
+        </h2>
       </div>
-      <div>
-        <h2>Total users: {totalUsers}</h2>
-        <h2>Newly registered users:</h2>
-        <ul>
-          {newestUsers.map((user, index) => (
-            <li key={`${user._id}-${index}`}>
-              {user.firstName} {user.lastName}
-            </li>
-          ))}
-        </ul>
-        {errors.users && newestUsers.length === 0 && <p>{errors.users}</p>}
-      </div>
-      <div>
-        <button>
-          <Link to="/register">
+      <div className="access-main">
+        <div className="access-icons">
+          <VscPerson className="icon-person" />
+          <GrPowerCycle className="icon-cycle" />
+          <VscPerson className="icon-person" />
+        </div>
+        <div className="access-stats">
+          <h2 className="user-stats-title">Total users: {totalUsers}</h2>
+          <h2 className="new-user-title">Newly registered users:</h2>
+          <ul className="new-user-list">
+            {newestUsers.map((user, index) => (
+              <li key={`${user._id}-${index}`} className="new-user-item">
+                {user.firstName} {user.lastName}
+              </li>
+            ))}
+          </ul>
+          {errors.users && newestUsers.length === 0 && (
+            <p className="access-error-message">{errors.users}</p>
+          )}
+        </div>
+        <div className="access-links-container">
+          <Link to="/register" className="access-link">
             <span>Create an account</span>
           </Link>
-        </button>
-        <button>
-          <Link to="/login">
+          <Link to="/login" className="access-link">
             <span>Log in</span>
           </Link>
-        </button>
+        </div>
+        {errors.general && (
+          <p className="access-error-message">{errors.general}</p>
+        )}
       </div>
-      {errors.general && <p>{errors.general}</p>}
     </div>
   );
 }

@@ -52,6 +52,13 @@ const handleErrors = (err) => {
   if (err.message === "longer password required") {
     errors.password = "Minimum of 6 characters required";
   }
+  if (err.message === "Verify email") {
+    errors.auth =
+      "Please verify your email to log in. A new email link was sent";
+  }
+  if (err.message === "No token found") {
+    errors.auth = "Invalid or expired verification token";
+  }
 
   /* HANDLE USER POST ERRORS */
   if (err.message === "unavailable") {
@@ -88,8 +95,8 @@ const handleErrors = (err) => {
   }
 
   /* HANDLE USER ERRORS */
-  if (err.message.includes("No users found")) {
-    errors.users = "No users found";
+  if (err.message.includes("No user(s) found")) {
+    errors.users = "No user(s) found";
   }
 
   return errors;

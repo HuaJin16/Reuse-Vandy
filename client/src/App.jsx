@@ -17,17 +17,25 @@ import CategoryButtons from "./components/CategoryButtons";
 import Message from "./pages/Message";
 import MessagesList from "./pages/MessagesList";
 import UserProfile from "./pages/UserProfile";
+import VerifyEmail from "./pages/VerifyEmail";
 
 function App() {
   const location = useLocation();
   const hideHeaderRoutes = ["/access", "/login", "/register"];
   const isSearchPage = location.pathname === "/search";
-  const isAuthPage = hideHeaderRoutes.includes(location.pathname);
+
+  const hideHeaders = (path) => {
+    return hideHeaderRoutes.includes(path) || path.startsWith("/verify/");
+  };
 
   return (
-    <div className={`app-container ${isAuthPage ? "auth-page" : ""}`}>
-      {!hideHeaderRoutes.includes(location.pathname) && <Header />}
-      {!hideHeaderRoutes.includes(location.pathname) && <CategoryButtons />}
+    <div
+      className={`app-container ${
+        hideHeaders(location.pathname) ? "auth-page" : ""
+      }`}
+    >
+      {!hideHeaders(location.pathname) && <Header />}
+      {!hideHeaders(location.pathname) && <CategoryButtons />}
       <div className={`page-content ${isSearchPage ? "search-page" : ""}}`}>
         <Routes>
           <Route element={<PrivateRoute />}>
@@ -46,6 +54,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/post/:postId" element={<Post />} />
           <Route path="/search" element={<Search />} />
+          <Route path="/verify/:token" element={<VerifyEmail />} />
         </Routes>
       </div>
     </div>

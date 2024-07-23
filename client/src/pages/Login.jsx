@@ -31,8 +31,8 @@ export default function Login() {
         body: JSON.stringify(data),
       });
       const userData = await res.json();
-      if (userData.inputErrors) {
-        setErrors(userData.inputErrors);
+      if (userData.errors) {
+        setErrors(userData.errors);
       } else {
         navigate("/");
         setData({});
@@ -91,9 +91,12 @@ export default function Login() {
           <span>Sign up</span>
         </Link>
       </div>
-      {errors.general && (
-        <span className="auth-error-message">{errors.general}</span>
-      )}
+      {errors.general ||
+        (errors.auth && (
+          <span className="auth-error-message">
+            {errors.general || errors.auth}
+          </span>
+        ))}
     </div>
   );
 }

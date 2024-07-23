@@ -115,3 +115,7 @@
 .auth-footer-link:hover {
   color: #0084ff;
 }
+
+.auth-success-message {
+  color: #4caf50;
+}

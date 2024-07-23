@@ -183,7 +183,7 @@ const getSavedPosts = async (req, res) => {
 const getUsers = async (req, res) => {
   try {
     const users = await User.find();
-    if (users.length === 0) throw Error("No users found");
+    if (users.length === 0) throw Error("No user(s) found");
 
     res.status(200).json(users);
   } catch (err) {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { BsPersonPlusFill } from "react-icons/bs";
 import "../styles/AuthPages.css";
 
@@ -11,7 +11,7 @@ export default function Register() {
     password: "",
   });
   const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -35,8 +35,8 @@ export default function Register() {
       if (userData.inputErrors) {
         setErrors(userData.inputErrors);
       } else {
-        navigate("/login");
-        setData({});
+        setMessage(userData.message);
+        setData({ firstName: "", lastName: "", email: "", password: "" });
         setErrors({});
       }
     } catch (err) {
@@ -114,6 +114,7 @@ export default function Register() {
           <span>Sign in</span>
         </Link>
       </div>
+      {message && <span className="auth-success-message">{message}</span>}
       {errors.general && (
         <span className="auth-error-message">{errors.general}</span>
       )}

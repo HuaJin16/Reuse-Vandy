@@ -24,6 +24,7 @@ const transporter = async (email, subject, text) => {
   } catch (err) {
     console.log("Email not sent");
     console.log(err.message);
+    throw new Error("Email sending failed");
   }
 };
 

@@ -59,6 +59,9 @@ const handleErrors = (err) => {
   if (err.message === "No token found") {
     errors.auth = "Invalid or expired verification token";
   }
+  if (err.message === "Email sending failed") {
+    errors.auth = "Failed to send verification email. Please try again later";
+  }
 
   /* HANDLE USER POST ERRORS */
   if (err.message === "unavailable") {

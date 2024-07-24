@@ -115,9 +115,12 @@ export default function Register() {
         </Link>
       </div>
       {message && <span className="auth-success-message">{message}</span>}
-      {errors.general && (
-        <span className="auth-error-message">{errors.general}</span>
-      )}
+      {errors.general ||
+        (errors.auth && (
+          <span className="auth-error-message">
+            {errors.general || errors.auth}
+          </span>
+        ))}
     </div>
   );
 }

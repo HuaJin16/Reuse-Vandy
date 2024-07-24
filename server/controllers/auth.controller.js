@@ -19,13 +19,19 @@ const register = async (req, res) => {
       avatar,
       isVerified: false,
     });
-    const savedUser = await newUser.save();
 
     const verificationToken = crypto.randomBytes(32).toString("hex");
     const newToken = new VerificationToken({
-      userId: savedUser._id,
+      userId: newUser._id,
       token: verificationToken,
     });
+
+    //send verification email
+    const url = `http://localhost:5173/verify/${verificationToken}`;
+    await transporter(email, "verify email", url);
+
+    // save the data if the email was sent successfully
+    const savedUser = await newUser.save();
     await newToken.save();
 
     // emit a socket event for newly registered users
@@ -34,10 +40,6 @@ const register = async (req, res) => {
       firstName: savedUser.firstName,
       lastName: savedUser.lastName,
     });
-
-    //send verification email
-    const url = `http://localhost:5173/verify/${verificationToken}`;
-    await transporter(savedUser.email, "verify email", url);
 
     res.status(201).json({
       message:
@@ -65,11 +67,12 @@ const login = async (req, res) => {
         userId: user._id,
         token: verificationToken,
       });
-      await newToken.save();
 
       //send verification email
       const url = `http://localhost:5173/verify/${verificationToken}`;
       await transporter(user.email, "verify email", url);
+
+      await newToken.save();
 
       throw Error("Verify email");
     }

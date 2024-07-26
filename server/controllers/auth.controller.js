@@ -122,4 +122,69 @@ const verifyEmail = async (req, res) => {
   }
 };
 
-module.exports = { register, login, logout, verifyEmail };
+// sends a pssword reset link to the user's email using a JWT token
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) throw Error("invalid email");
+
+    const user = await User.findOne({ email });
+    if (!user) throw Error("invalid email");
+
+    // generate a JWT token to be used in the url link
+    const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    //send reset password email link
+    const url = `http://localhost:5173/reset/${resetToken}`;
+    await transporter(email, "reset password", url);
+
+    res.status(200).json({ message: "Password reset link sent to your email" });
+  } catch (err) {
+    const errors = handleErrors(err);
+    return res.status(400).json({ errors });
+  }
+};
+
+// updates the user's password using the provided token and new password
+const resetPassword = async (req, res) => {
+  try {
+    const token = req.params.token;
+    const { newPassword } = req.body;
+
+    if (!token) throw Error("No token found");
+
+    if (!newPassword) throw Error("Password is required");
+
+    let userId = "";
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      // checks if the token has expired
+      if (err) throw Error("No token found");
+      userId = decoded.id;
+    });
+
+    const user = await User.findById(userId);
+    if (!user) throw Error("No user(s) found");
+
+    const samePassword = await bcrypt.compare(newPassword, user.password);
+    if (samePassword) throw Error("Same password");
+
+    user.password = newPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Password reset successfully" });
+  } catch (err) {
+    const errors = handleErrors(err);
+    return res.status(400).json({ errors });
+  }
+};
+
+module.exports = {
+  register,
+  login,
+  logout,
+  verifyEmail,
+  forgotPassword,
+  resetPassword,
+};

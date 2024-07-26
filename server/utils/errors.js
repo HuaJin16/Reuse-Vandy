@@ -57,10 +57,16 @@ const handleErrors = (err) => {
       "Please verify your email to log in. A new email link was sent";
   }
   if (err.message === "No token found") {
-    errors.auth = "Invalid or expired verification token";
+    errors.auth = "Invalid or expired token. Request a new link";
   }
   if (err.message === "Email sending failed") {
     errors.auth = "Failed to send verification email. Please try again later";
+  }
+  if (err.message === "Password is required") {
+    errors.auth = "Password input is required";
+  }
+  if (err.message === "Same password") {
+    errors.auth = "New password must be different from the current password";
   }
 
   /* HANDLE USER POST ERRORS */

@@ -18,14 +18,20 @@ import Message from "./pages/Message";
 import MessagesList from "./pages/MessagesList";
 import UserProfile from "./pages/UserProfile";
 import VerifyEmail from "./pages/VerifyEmail";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   const location = useLocation();
-  const hideHeaderRoutes = ["/access", "/login", "/register"];
+  const hideHeaderRoutes = ["/access", "/login", "/register", "/forgot"];
   const isSearchPage = location.pathname === "/search";
 
   const hideHeaders = (path) => {
-    return hideHeaderRoutes.includes(path) || path.startsWith("/verify/");
+    return (
+      hideHeaderRoutes.includes(path) ||
+      path.startsWith("/verify/") ||
+      path.startsWith("/reset/")
+    );
   };
 
   return (
@@ -55,6 +61,8 @@ function App() {
           <Route path="/post/:postId" element={<Post />} />
           <Route path="/search" element={<Search />} />
           <Route path="/verify/:token" element={<VerifyEmail />} />
+          <Route path="/forgot" element={<ForgotPassword />} />
+          <Route path="/reset/:token" element={<ResetPassword />} />
         </Routes>
       </div>
     </div>

@@ -20,7 +20,7 @@ const transporter = async (email, subject, text) => {
       text: text,
     });
 
-    console.log("Verification email sent successfully");
+    console.log("Email sent successfully");
   } catch (err) {
     console.log("Email not sent");
     console.log(err.message);

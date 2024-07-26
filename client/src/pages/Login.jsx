@@ -83,12 +83,14 @@ export default function Login() {
         </div>
       </form>
       <div className="auth-forgot-password">
-        <span>Forgot Password?</span>
+        <Link to="/forgot" className="forgot-password-link">
+          Forgot Password?
+        </Link>
       </div>
       <div className="auth-footer">
         <span className="auth-prompt">Dont have an account?</span>
         <Link to="/register" className="auth-footer-link">
-          <span>Sign up</span>
+          <span className="footer-span">Sign up</span>
         </Link>
       </div>
       {errors.general ||
